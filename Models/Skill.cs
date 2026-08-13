@@ -6,3 +6,12 @@ public class Skill
     public required string Name { get; set; }
     public required SkillCategory SkillCategory { get; set; }
 }
+
+public enum SkillCategory
+{
+    LanguagesAndBackend,
+    SystemsAndData,
+    Platform,
+    TestingAndReliability,
+    CloudAndDevOps,
+}
