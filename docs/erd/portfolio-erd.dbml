@@ -1,0 +1,93 @@
+// Portfolio API — Entity Relationship Diagram
+// Source of truth: docs/erd/portfolio-erd.dbml (edit here, then paste into
+// https://dbdiagram.io to regenerate docs/erd/portfolio-erd.svg).
+
+Table Profile {
+  id guid [pk]
+  title string
+  headline string
+  subtitle string
+}
+
+Table Skill {
+  id guid [pk]
+  name string
+  skillCategory SkillCategory
+}
+
+Table Experience {
+  id guid [pk]
+  jobTitle string
+  employer string
+  startDate date
+  endDate date
+  description string
+}
+
+Table Qualification {
+  id guid [pk]
+  name string
+  institution string
+  startDate date
+  endDate date
+  nqfLevel NqfLevel
+}
+
+Table Project {
+  id guid [pk]
+  name string
+  url string
+}
+
+Table Certification {
+  id guid [pk]
+  name string
+  url string
+  issuingOrganization string
+  issueDate date
+}
+
+Table ExperienceSkill {
+  id guid [pk]
+  experienceId guid [ref: > Experience.id]
+  skillId guid [ref: > Skill.id]
+}
+
+Table QualificationSkill {
+  id guid [pk]
+  qualificationId guid [ref: > Qualification.id]
+  skillId guid [ref: > Skill.id]
+}
+
+Table ProjectSkill {
+  id guid [pk]
+  projectId guid [ref: > Project.id]
+  skillId guid [ref: > Skill.id]
+}
+
+Table CertificationSkill {
+  id guid [pk]
+  certificationId guid [ref: > Certification.id]
+  skillId guid [ref: > Skill.id]
+}
+
+Enum SkillCategory {
+  LanguagesAndBackend
+  SystemsAndData
+  Platform
+  TestingAndReliability
+  CloudAndDevOps
+}
+
+Enum NqfLevel {
+  Grade9 [note: '1 — GETC / ABET Level 4']
+  Grade10 [note: '2 — NCV Level 2']
+  Grade11 [note: '3 — NCV Level 3']
+  Grade12 [note: '4 — Matric / NCV Level 4']
+  HigherCertificate [note: '5']
+  Diploma [note: '6 — Advanced Certificate']
+  BachelorsDegree [note: '7 — Advanced Diploma']
+  HonoursDegree [note: '8 — Postgraduate Diploma']
+  MastersDegree [note: '9']
+  DoctoralDegree [note: '10']
+}
