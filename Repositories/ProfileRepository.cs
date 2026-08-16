@@ -4,6 +4,7 @@ using ejmabunda_web_api.Models;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
+/// <inheritdoc cref="IProfileRepository"/>
 public class ProfileRepository : IProfileRepository
 {
     private readonly PortfolioContext _context;
@@ -15,11 +16,13 @@ public class ProfileRepository : IProfileRepository
         _logger = logger;
     }
 
+    /// <inheritdoc/>
     public async Task<Profile?> GetProfileAsync()
     {
         return await _context.Profiles.FirstOrDefaultAsync();
     }
 
+    /// <inheritdoc/>
     public async Task<Profile?> AddProfileAsync(ProfileAddDto profileDto)
     {
         var profile = new Profile()
@@ -36,6 +39,7 @@ public class ProfileRepository : IProfileRepository
         }
         catch (DbUpdateException e) when (e.InnerException is SqlException { Number: 2627 })
         {
+            // 2627 = SQL Server unique/primary key violation — a profile already exists.
             _logger.LogInformation(e, e.InnerException.Message);
             return null;
         }

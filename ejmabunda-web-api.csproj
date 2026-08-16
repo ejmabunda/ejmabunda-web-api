@@ -5,6 +5,11 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>ejmabunda_web_api</RootNamespace>
+    <!-- Emits XML doc comments so OpenAPI/Swagger can surface them; CS1591 (missing
+         comment on a public member) is suppressed since this is an app, not a
+         published library — comments are added where they add value, not enforced. -->
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
