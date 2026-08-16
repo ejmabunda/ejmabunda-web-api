@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ejmabunda_web_api.Models;
 using Microsoft.AspNetCore.Authorization;
+using ejmabunda_web_api.Services;
+using ejmabunda_web_api.Repositories;
 
 namespace ejmabunda_web_api.Controllers
 {
@@ -16,31 +13,35 @@ namespace ejmabunda_web_api.Controllers
     public class ProfileController : ControllerBase
     {
         private readonly PortfolioContext _context;
+        private readonly IProfileRepository _repository;
+        private readonly IProfileService _service;
 
-        public ProfileController(PortfolioContext context)
+        public ProfileController(
+            PortfolioContext context,
+            IProfileRepository repository,
+            IProfileService service)
         {
             _context = context;
+            _repository = repository;
+            _service = service;
         }
 
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<Profile>> GetProfile()
         {
-            var profile = await _context.Profiles.FirstOrDefaultAsync();
+            var profile = await _repository.GetProfileAsync();
 
-            if (profile == null)
-            {
-                return NotFound();
-            }
-
+            if (profile == null) return NotFound();
             return Ok(profile);
         }
 
         // PUT: api/Profile
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
-        public async Task<IActionResult> PutProfile([FromBody] ProfilePutDto profileDto)
+        public async Task<IActionResult> PutProfileAsync([FromBody] ProfilePutDto profileDto)
         {
-            var profile = await _context.Profiles.FirstOrDefaultAsync();
+            var profile = await _repository.GetProfileAsync();
             if (profile == null) return NotFound();
 
             profile.Title = profileDto.Title ?? profile.Title;
@@ -69,21 +70,14 @@ namespace ejmabunda_web_api.Controllers
         // POST: api/Profile
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Profile>> PostProfile([FromBody] ProfileAddDto profileDto)
+        [AllowAnonymous]
+        public async Task<ActionResult<Profile>> PostProfileAsync([FromBody] ProfileAddDto profileDto)
         {
-            if (await ProfileExists()) return Conflict(new { error = "Profile already exists." });
+            var profile = await _service.AddProfileAsync(profileDto);
 
-            var profile = new Profile()
-            {
-                Id = Guid.NewGuid(),
-                Title = profileDto.Title,
-                Headline = profileDto.Headline,
-                Subtitle = profileDto.Subtitle
-            };
-            _context.Profiles.Add(profile);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetProfile", new { id = profile.Id }, profile);
+            if (profile == null)
+                return Conflict(new { error = "Profile already exists." });
+            return CreatedAtAction("GetProfile", new { Id = profile.Id }, profile);
         }
 
         // DELETE: api/Profile
@@ -104,7 +98,7 @@ namespace ejmabunda_web_api.Controllers
 
         private async Task<bool> ProfileExists()
         {
-            return await _context.Profiles.AnyAsync();
+            return await _repository.GetProfileAsync() != null;
         }
     }
 }

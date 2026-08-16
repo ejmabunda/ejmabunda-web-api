@@ -6,7 +6,7 @@ public class PortfolioContext : DbContext
 {
     public PortfolioContext(DbContextOptions<PortfolioContext> options) : base(options)
     {
-        
+
     }
 
     public DbSet<Profile> Profiles { get; set; } = null!;
@@ -15,4 +15,13 @@ public class PortfolioContext : DbContext
     public DbSet<Project> Projects { get; set; } = null!;
     public DbSet<Experience> Experiences { get; set; } = null!;
     public DbSet<Certification> Certifications { get; set; } = null!;
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+
+        modelBuilder.Entity<Profile>(entity =>
+            entity.Property(p => p.Id).ValueGeneratedNever()
+        );
+    }
 }
