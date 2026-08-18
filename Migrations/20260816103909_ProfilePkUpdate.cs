@@ -35,7 +35,7 @@ namespace ejmabunda_web_api.Migrations
                     nullable: false,
                     type: "uniqueidentifier"
                 );
-            migrationBuilder.AddPrimaryKey("PK_Profiles", "Profiles", "ID");
+            migrationBuilder.AddPrimaryKey("PK_Profiles", "Profiles", "Id");
         }
     }
 }

@@ -53,12 +53,8 @@ public class ProfileRepository : IProfileRepository
     }
 
     /// <inheritdoc/>
-    public async Task<Profile?> UpdateProfileAsync(ProfilePutDto profileDto)
+    public async Task<Profile> UpdateProfileAsync(Profile profile, ProfilePutDto profileDto)
     {
-        var profile = await _context.Profiles.FirstOrDefaultAsync();
-
-        if (profile == null) return null;
-
         profile.Title = profileDto.Title ?? profile.Title;
         profile.Headline = profileDto.Headline ?? profile.Headline;
         profile.Subtitle = profileDto.Subtitle ?? profile.Subtitle;

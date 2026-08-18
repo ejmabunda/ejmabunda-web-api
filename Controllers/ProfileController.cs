@@ -50,16 +50,13 @@ namespace ejmabunda_web_api.Controllers
         [HttpPut]
         public async Task<IActionResult> PutProfileAsync([FromBody] ProfilePutDto profileDto)
         {
-            var profile = await _repository.GetProfileAsync();
-            if (profile == null) return NotFound();
-
-            profile.Title = profileDto.Title ?? profile.Title;
-            profile.Headline = profileDto.Headline ?? profile.Headline;
-            profile.Subtitle = profileDto.Subtitle ?? profile.Subtitle;
-
+            Profile? profile;
             try
             {
-                await _service.UpdateProfileAsync(profileDto);
+                profile = await _service.UpdateProfileAsync(profileDto);
+                if (profile == null) return NotFound();
+
+                return Ok(profile);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -72,8 +69,6 @@ namespace ejmabunda_web_api.Controllers
                     throw;
                 }
             }
-
-            return Ok(profile);
         }
 
         /// <summary>Creates the profile. Fails if one already exists, since the profile is a singleton.</summary>
@@ -98,16 +93,11 @@ namespace ejmabunda_web_api.Controllers
         // DELETE: api/Profile
         [HttpDelete]
         [AllowAnonymous]
-        public async Task<IActionResult> DeleteProfile()
+        public async Task<IActionResult> DeleteProfileAsync()
         {
-            var profile = await _repository.GetProfileAsync();
-            if (profile == null)
-            {
-                return NotFound();
-            }
-
+            var profile = await _service.DeleteProfileAsync();
             
-
+            if (profile == null) return NotFound();
             return NoContent();
         }
 

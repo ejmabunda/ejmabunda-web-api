@@ -13,7 +13,7 @@ public interface IProfileRepository
     /// </summary>
     Task<Profile?> AddProfileAsync(ProfileAddDto profileDto);
 
-    Task<Profile?> UpdateProfileAsync(ProfilePutDto profileDto);
+    Task<Profile> UpdateProfileAsync(Profile profile, ProfilePutDto profileDto);
 
     Task<Profile?> DeleteProfileAsync(Profile profile);
 }
