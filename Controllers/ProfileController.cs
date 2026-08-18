@@ -60,14 +60,8 @@ namespace ejmabunda_web_api.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await ProfileExists())
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                if (!await ProfileExists()) return NotFound();
+                throw;
             }
         }
 
@@ -95,8 +89,9 @@ namespace ejmabunda_web_api.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> DeleteProfileAsync()
         {
-            var profile = await _service.DeleteProfileAsync();
-            
+            Profile? profile;
+            profile = await _service.DeleteProfileAsync();
+
             if (profile == null) return NotFound();
             return NoContent();
         }

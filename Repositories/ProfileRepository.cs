@@ -36,6 +36,8 @@ public class ProfileRepository : IProfileRepository
         {
             await _context.Profiles.AddAsync(profile);
             await _context.SaveChangesAsync();
+
+            return profile;
         }
         catch (DbUpdateException e) when (e.InnerException is SqlException { Number: 2627 })
         {
@@ -48,8 +50,6 @@ public class ProfileRepository : IProfileRepository
             _logger.LogError(e, "Something went wrong during a database operation.");
             throw;
         }
-
-        return profile;
     }
 
     /// <inheritdoc/>
@@ -59,8 +59,16 @@ public class ProfileRepository : IProfileRepository
         profile.Headline = profileDto.Headline ?? profile.Headline;
         profile.Subtitle = profileDto.Subtitle ?? profile.Subtitle;
 
-        await _context.SaveChangesAsync();
-        return profile;
+        try
+        {
+            await _context.SaveChangesAsync();
+            return profile;
+        }
+        catch (DbUpdateException e) when (e.InnerException is SqlException)
+        {
+            _logger.LogError(e, "Something went wrong during a database operation.");
+            throw;
+        }
     }
 
     public async Task<Profile?> DeleteProfileAsync(Profile profile)
@@ -69,13 +77,13 @@ public class ProfileRepository : IProfileRepository
         {
             _context.Profiles.Remove(profile);
             await _context.SaveChangesAsync();
+
+            return profile;
         }
         catch (DbUpdateException e) when (e.InnerException is SqlException)
         {
-            _logger.LogError(e, e.InnerException.Message);
-            return null;
+            _logger.LogError(e, "Something went wrong during a database operation.");
+            throw;
         }
-
-        return profile;
     }
 }
