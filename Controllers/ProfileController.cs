@@ -18,16 +18,13 @@ namespace ejmabunda_web_api.Controllers
     [Authorize]
     public class ProfileController : ControllerBase
     {
-        private readonly PortfolioContext _context;
         private readonly IProfileRepository _repository;
         private readonly IProfileService _service;
 
         public ProfileController(
-            PortfolioContext context,
             IProfileRepository repository,
             IProfileService service)
         {
-            _context = context;
             _repository = repository;
             _service = service;
         }
@@ -53,30 +50,19 @@ namespace ejmabunda_web_api.Controllers
         [HttpPut]
         public async Task<IActionResult> PutProfileAsync([FromBody] ProfilePutDto profileDto)
         {
-            var profile = await _repository.GetProfileAsync();
-            if (profile == null) return NotFound();
-
-            profile.Title = profileDto.Title ?? profile.Title;
-            profile.Headline = profileDto.Headline ?? profile.Headline;
-            profile.Subtitle = profileDto.Subtitle ?? profile.Subtitle;
-
+            Profile? profile;
             try
             {
-                await _context.SaveChangesAsync();
+                profile = await _service.UpdateProfileAsync(profileDto);
+                if (profile == null) return NotFound();
+
+                return Ok(profile);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!await ProfileExists())
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                if (!await ProfileExists()) return NotFound();
+                throw;
             }
-
-            return Ok(profile);
         }
 
         /// <summary>Creates the profile. Fails if one already exists, since the profile is a singleton.</summary>
@@ -101,17 +87,12 @@ namespace ejmabunda_web_api.Controllers
         // DELETE: api/Profile
         [HttpDelete]
         [AllowAnonymous]
-        public async Task<IActionResult> DeleteProfile()
+        public async Task<IActionResult> DeleteProfileAsync()
         {
-            var profile = await _context.Profiles.FirstOrDefaultAsync();
-            if (profile == null)
-            {
-                return NotFound();
-            }
+            Profile? profile;
+            profile = await _service.DeleteProfileAsync();
 
-            _context.Profiles.Remove(profile);
-            await _context.SaveChangesAsync();
-
+            if (profile == null) return NotFound();
             return NoContent();
         }
 

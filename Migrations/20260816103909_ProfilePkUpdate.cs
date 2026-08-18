@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -20,7 +19,7 @@ namespace ejmabunda_web_api.Migrations
                     nullable: false,
                     type: "int"
                 );
-            migrationBuilder.AddPrimaryKey("PK_Profiles", "Profiles", "ID");
+            migrationBuilder.AddPrimaryKey("PK_Profiles", "Profiles", "Id");
         }
 
         /// <inheritdoc />
@@ -35,7 +34,7 @@ namespace ejmabunda_web_api.Migrations
                     nullable: false,
                     type: "uniqueidentifier"
                 );
-            migrationBuilder.AddPrimaryKey("PK_Profiles", "Profiles", "ID");
+            migrationBuilder.AddPrimaryKey("PK_Profiles", "Profiles", "Id");
         }
     }
 }
