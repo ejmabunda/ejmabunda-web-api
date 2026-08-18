@@ -18,16 +18,13 @@ namespace ejmabunda_web_api.Controllers
     [Authorize]
     public class ProfileController : ControllerBase
     {
-        private readonly PortfolioContext _context;
         private readonly IProfileRepository _repository;
         private readonly IProfileService _service;
 
         public ProfileController(
-            PortfolioContext context,
             IProfileRepository repository,
             IProfileService service)
         {
-            _context = context;
             _repository = repository;
             _service = service;
         }
@@ -62,7 +59,7 @@ namespace ejmabunda_web_api.Controllers
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _service.UpdateProfileAsync(profileDto);
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -103,14 +100,13 @@ namespace ejmabunda_web_api.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> DeleteProfile()
         {
-            var profile = await _context.Profiles.FirstOrDefaultAsync();
+            var profile = await _repository.GetProfileAsync();
             if (profile == null)
             {
                 return NotFound();
             }
 
-            _context.Profiles.Remove(profile);
-            await _context.SaveChangesAsync();
+            
 
             return NoContent();
         }

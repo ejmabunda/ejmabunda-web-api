@@ -10,4 +10,8 @@ public interface IProfileService
     /// since the profile is a singleton (see <see cref="Profile"/>).
     /// </summary>
     Task<Profile?> AddProfileAsync(ProfileAddDto profileDto);
+
+    Task<Profile?> UpdateProfileAsync(ProfilePutDto profileDto);
+
+    Task<Profile?> DeleteProfileAsync();
 }

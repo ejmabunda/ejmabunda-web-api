@@ -8,9 +8,9 @@ using Microsoft.EntityFrameworkCore;
 public class ProfileRepository : IProfileRepository
 {
     private readonly PortfolioContext _context;
-    private readonly ILogger<Profile> _logger;
+    private readonly ILogger<ProfileRepository> _logger;
 
-    public ProfileRepository(PortfolioContext context, ILogger<Profile> logger)
+    public ProfileRepository(PortfolioContext context, ILogger<ProfileRepository> logger)
     {
         _context = context;
         _logger = logger;
@@ -45,8 +45,39 @@ public class ProfileRepository : IProfileRepository
         }
         catch (DbUpdateException e)
         {
-            _logger.LogError(e.InnerException, "Something went wrong during a database operation.");
+            _logger.LogError(e, "Something went wrong during a database operation.");
             throw;
+        }
+
+        return profile;
+    }
+
+    /// <inheritdoc/>
+    public async Task<Profile?> UpdateProfileAsync(ProfilePutDto profileDto)
+    {
+        var profile = await _context.Profiles.FirstOrDefaultAsync();
+
+        if (profile == null) return null;
+
+        profile.Title = profileDto.Title ?? profile.Title;
+        profile.Headline = profileDto.Headline ?? profile.Headline;
+        profile.Subtitle = profileDto.Subtitle ?? profile.Subtitle;
+
+        await _context.SaveChangesAsync();
+        return profile;
+    }
+
+    public async Task<Profile?> DeleteProfileAsync(Profile profile)
+    {
+        try
+        {
+            _context.Profiles.Remove(profile);
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateException e) when (e.InnerException is SqlException)
+        {
+            _logger.LogError(e, e.InnerException.Message);
+            return null;
         }
 
         return profile;

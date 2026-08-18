@@ -12,4 +12,8 @@ public interface IProfileRepository
     /// already exists (enforced by the database's unique/primary key constraint).
     /// </summary>
     Task<Profile?> AddProfileAsync(ProfileAddDto profileDto);
+
+    Task<Profile?> UpdateProfileAsync(ProfilePutDto profileDto);
+
+    Task<Profile?> DeleteProfileAsync(Profile profile);
 }

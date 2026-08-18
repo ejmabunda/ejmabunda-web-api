@@ -20,7 +20,7 @@ namespace ejmabunda_web_api.Migrations
                     nullable: false,
                     type: "int"
                 );
-            migrationBuilder.AddPrimaryKey("PK_Profiles", "Profiles", "ID");
+            migrationBuilder.AddPrimaryKey("PK_Profiles", "Profiles", "Id");
         }
 
         /// <inheritdoc />
