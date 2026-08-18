@@ -100,6 +100,7 @@ namespace ejmabunda_web_api.Controllers
         /// <response code="404">No profile exists to delete.</response>
         // DELETE: api/Profile
         [HttpDelete]
+        [AllowAnonymous]
         public async Task<IActionResult> DeleteProfile()
         {
             var profile = await _context.Profiles.FirstOrDefaultAsync();
