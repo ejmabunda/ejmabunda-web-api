@@ -15,7 +15,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(FrontendCorsPolicy, policy =>
     {
-        policy.WithOrigins("https://ejmabunda.dev", "http://localhost", "https://localhost")
+        policy.WithOrigins("https://ejmabunda.dev", "http://localhost:3000")
               .AllowAnyHeader()
               .AllowAnyMethod();
     });
