@@ -1,5 +1,6 @@
 namespace ejmabunda_web_api.Models;
 
+/// <summary>A professional certification (name, issuer, and verification link).</summary>
 public class Certification
 {
     public Guid Id { get; set; }
@@ -9,6 +10,7 @@ public class Certification
     public required DateTime IssueDate { get; set; }
 }
 
+/// <summary>Join entity linking a <see cref="Certification"/> to a <see cref="Skill"/> it covers.</summary>
 public class CertificationSkill
 {
     public Guid Id { get; set; }
