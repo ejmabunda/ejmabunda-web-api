@@ -21,9 +21,7 @@ namespace ejmabunda_web_api.Controllers
         private readonly IProfileRepository _repository;
         private readonly IProfileService _service;
 
-        public ProfileController(
-            IProfileRepository repository,
-            IProfileService service)
+        public ProfileController(IProfileRepository repository, IProfileService service)
         {
             _repository = repository;
             _service = service;
@@ -71,7 +69,6 @@ namespace ejmabunda_web_api.Controllers
         // POST: api/Profile
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        [AllowAnonymous]
         public async Task<ActionResult<Profile>> PostProfileAsync([FromBody] ProfileAddDto profileDto)
         {
             var profile = await _service.AddProfileAsync(profileDto);
@@ -86,7 +83,6 @@ namespace ejmabunda_web_api.Controllers
         /// <response code="404">No profile exists to delete.</response>
         // DELETE: api/Profile
         [HttpDelete]
-        [AllowAnonymous]
         public async Task<IActionResult> DeleteProfileAsync()
         {
             Profile? profile;
