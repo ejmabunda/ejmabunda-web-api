@@ -1,6 +1,3 @@
-@ejmabunda_web_api_HostAddress = http://localhost:5014
-
-GET {{ejmabunda_web_api_HostAddress}}/weatherforecast/
-Accept: application/json
+@ejmabunda_web_api_HostAddress = https://ejmabunda-web-api-dfg5bzfbh2c8e3h5.southafricanorth-01.azurewebsites.net
 
 ###
