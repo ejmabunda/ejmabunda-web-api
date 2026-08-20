@@ -1,7 +1,3 @@
-// Portfolio API — Entity Relationship Diagram
-// Source of truth: docs/erd/portfolio-erd.dbml (edit here, then paste into
-// https://dbdiagram.io to regenerate docs/erd/portfolio-erd.svg).
-
 Table Profile {
   id guid [pk]
   title string

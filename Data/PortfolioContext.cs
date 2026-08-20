@@ -16,6 +16,7 @@ public class PortfolioContext : DbContext
     public DbSet<Project> Projects { get; set; } = null!;
     public DbSet<Experience> Experiences { get; set; } = null!;
     public DbSet<Certification> Certifications { get; set; } = null!;
+    public DbSet<User> Users { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -26,5 +27,18 @@ public class PortfolioContext : DbContext
         modelBuilder.Entity<Profile>(entity =>
             entity.Property(p => p.Id).ValueGeneratedNever()
         );
+
+        // User is a singleton row (id fixed at 1, see User.Id), so EF must not
+        // try to generate its own identity value for it.
+        modelBuilder.Entity<User>(entity =>
+            entity.Property(u => u.Id).ValueGeneratedNever()
+        );
+        
+        modelBuilder.Entity<User>().HasData(new User
+        {
+            Id = 1,
+            Username = "admin",
+            PasswordHash = "AQAAAAIAAYagAAAAELEppuCtBGV1aw7+mVELYbgacYd9Cxhl1bmc/bx98ylwC8NshEbcsXrDUzulLq7f5Q=="
+        });
     }
 }
