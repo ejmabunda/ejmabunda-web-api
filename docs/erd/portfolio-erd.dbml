@@ -1,8 +1,14 @@
 Table Profile {
-  id guid [pk]
+  id int [pk, note: 'singleton row, id fixed at 1']
   title string
   headline string
   subtitle string
+}
+
+Table User {
+  id int [pk, note: 'singleton row, id fixed at 1']
+  username string
+  passwordHash string
 }
 
 Table Skill {
