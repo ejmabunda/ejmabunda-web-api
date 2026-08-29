@@ -20,6 +20,8 @@ public class UserRepository : IUserRepository
     public async Task<User?> UpdateUserAsync(UserDto userDto, User user)
     {
         user.PasswordHash = userDto.PasswordHash ?? user.PasswordHash;
+        user.Sessions = userDto.Sessions ?? user.Sessions;
+        
         await _context.SaveChangesAsync();
 
         return user;
