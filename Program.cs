@@ -22,7 +22,8 @@ builder.Services.AddCors(options =>
         policy.WithOrigins(
             builder.Configuration.GetSection("ApiSettings")["FrontendUrl"]!.ToString())
               .AllowAnyHeader()
-              .AllowAnyMethod();
+              .AllowAnyMethod()
+              .AllowCredentials();
     });
 });
 
