@@ -1,15 +1,209 @@
 {
   "version": "3.0.0",
-  "darkMode": false,
+  "darkMode": true,
   "gridEnabling": false,
   "currentViewName": null,
   "defaultView": {
     "detailLevel": "All",
     "relationshipMode": "All",
-    "tablePositions": [],
+    "tablePositions": [
+      {
+        "name": "Profile",
+        "schemaName": "public",
+        "x": 587.783203125,
+        "y": 12
+      },
+      {
+        "name": "User",
+        "schemaName": "public",
+        "x": 297.669921875,
+        "y": 12
+      },
+      {
+        "name": "Skill",
+        "schemaName": "public",
+        "x": 12,
+        "y": 528
+      },
+      {
+        "name": "Experience",
+        "schemaName": "public",
+        "x": 12,
+        "y": 258
+      },
+      {
+        "name": "Qualification",
+        "schemaName": "public",
+        "x": 12,
+        "y": 702
+      },
+      {
+        "name": "Project",
+        "schemaName": "public",
+        "x": 12,
+        "y": 972
+      },
+      {
+        "name": "Certification",
+        "schemaName": "public",
+        "x": 12,
+        "y": 1146
+      },
+      {
+        "name": "ExperienceSkill",
+        "schemaName": "public",
+        "x": 588.576171875,
+        "y": 258
+      },
+      {
+        "name": "QualificationSkill",
+        "schemaName": "public",
+        "x": 588.576171875,
+        "y": 432
+      },
+      {
+        "name": "ProjectSkill",
+        "schemaName": "public",
+        "x": 588.576171875,
+        "y": 606
+      },
+      {
+        "name": "CertificationSkill",
+        "schemaName": "public",
+        "x": 588.576171875,
+        "y": 780
+      },
+      {
+        "name": "Session",
+        "schemaName": "public",
+        "x": 12,
+        "y": 12
+      }
+    ],
     "tableGroupCollapseStates": [],
     "stickyNoteLayouts": [],
-    "referencePaths": []
+    "referencePaths": [
+      {
+        "firstFieldNames": [
+          "id"
+        ],
+        "firstTableName": "Experience",
+        "firstSchemaName": "public",
+        "firstRelation": "1",
+        "secondFieldNames": [
+          "experienceId"
+        ],
+        "secondTableName": "ExperienceSkill",
+        "secondSchemaName": "public",
+        "secondRelation": "*",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "id"
+        ],
+        "firstTableName": "Skill",
+        "firstSchemaName": "public",
+        "firstRelation": "1",
+        "secondFieldNames": [
+          "skillId"
+        ],
+        "secondTableName": "ExperienceSkill",
+        "secondSchemaName": "public",
+        "secondRelation": "*",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "id"
+        ],
+        "firstTableName": "Qualification",
+        "firstSchemaName": "public",
+        "firstRelation": "1",
+        "secondFieldNames": [
+          "qualificationId"
+        ],
+        "secondTableName": "QualificationSkill",
+        "secondSchemaName": "public",
+        "secondRelation": "*",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "id"
+        ],
+        "firstTableName": "Skill",
+        "firstSchemaName": "public",
+        "firstRelation": "1",
+        "secondFieldNames": [
+          "skillId"
+        ],
+        "secondTableName": "QualificationSkill",
+        "secondSchemaName": "public",
+        "secondRelation": "*",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "id"
+        ],
+        "firstTableName": "Project",
+        "firstSchemaName": "public",
+        "firstRelation": "1",
+        "secondFieldNames": [
+          "projectId"
+        ],
+        "secondTableName": "ProjectSkill",
+        "secondSchemaName": "public",
+        "secondRelation": "*",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "id"
+        ],
+        "firstTableName": "Skill",
+        "firstSchemaName": "public",
+        "firstRelation": "1",
+        "secondFieldNames": [
+          "skillId"
+        ],
+        "secondTableName": "ProjectSkill",
+        "secondSchemaName": "public",
+        "secondRelation": "*",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "id"
+        ],
+        "firstTableName": "Certification",
+        "firstSchemaName": "public",
+        "firstRelation": "1",
+        "secondFieldNames": [
+          "certificationId"
+        ],
+        "secondTableName": "CertificationSkill",
+        "secondSchemaName": "public",
+        "secondRelation": "*",
+        "checkPoints": []
+      },
+      {
+        "firstFieldNames": [
+          "id"
+        ],
+        "firstTableName": "Skill",
+        "firstSchemaName": "public",
+        "firstRelation": "1",
+        "secondFieldNames": [
+          "skillId"
+        ],
+        "secondTableName": "CertificationSkill",
+        "secondSchemaName": "public",
+        "secondRelation": "*",
+        "checkPoints": []
+      }
+    ]
   },
   "views": {}
 }
