@@ -7,8 +7,9 @@ Table Profile {
 
 Table User {
   id int [pk, note: 'singleton row, id fixed at 1']
-  username string
+  username string [unique]
   passwordHash string
+  sessions list
 }
 
 Table Skill {
@@ -92,4 +93,13 @@ Enum NqfLevel {
   HonoursDegree [note: '8 — Postgraduate Diploma']
   MastersDegree [note: '9']
   DoctoralDegree [note: '10']
+}
+
+Table Session {
+  Id guid [pk]
+  CurrentTokenHash string
+  IsExpired bool
+  CreatedAt datetime
+  ExpiresAt datetime
+  Username string
 }

@@ -17,6 +17,8 @@ public class PortfolioContext : DbContext
     public DbSet<Experience> Experiences { get; set; } = null!;
     public DbSet<Certification> Certifications { get; set; } = null!;
     public DbSet<User> Users { get; set; } = null!;
+    public DbSet<Session> Sessions { get; set; } = null!;
+    public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
