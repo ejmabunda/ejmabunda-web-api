@@ -1,9 +1,7 @@
 using ejmabunda_web_api.Dtos;
-using ejmabunda_web_api.Models;
 using ejmabunda_web_api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Namotion.Reflection;
 
 namespace ejmabunda_web_api.Controllers;
 
