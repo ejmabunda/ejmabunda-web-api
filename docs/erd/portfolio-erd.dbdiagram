@@ -76,8 +76,14 @@
       {
         "name": "Session",
         "schemaName": "public",
-        "x": 12,
-        "y": 12
+        "x": 0.09086424994447384,
+        "y": -76.42624992705929
+      },
+      {
+        "name": "RefreshToken",
+        "schemaName": "public",
+        "x": 814.3936959250043,
+        "y": 3.898547108805751
       }
     ],
     "tableGroupCollapseStates": [],

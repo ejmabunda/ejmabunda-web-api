@@ -11,12 +11,12 @@ public class Experience
     /// <summary>Null while the role is ongoing.</summary>
     public DateTime? EndDate { get; set; }
     public required string Description { get; set; }
+    public List<ExperienceSkill> ExperienceSkills { get; set; } = [];
 }
 
 /// <summary>Join entity linking an <see cref="Experience"/> to a <see cref="Skill"/> used in that role.</summary>
 public class ExperienceSkill
 {
-    public Guid Id { get; set; }
     public Guid ExperienceId { get; set; }
     public Guid SkillId { get; set; }
     public Experience Experience { get; set; } = null!;
