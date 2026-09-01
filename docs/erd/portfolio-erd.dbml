@@ -96,10 +96,18 @@ Enum NqfLevel {
 }
 
 Table Session {
-  Id guid [pk]
-  CurrentTokenHash string
-  IsExpired bool
-  CreatedAt datetime
-  ExpiresAt datetime
-  Username string
+  id guid [pk]
+  userId int [ref: > User.id]
+  refreshTokenHash string [note: 'current token, HMAC-SHA256 hashed']
+  createdAt datetime
+  expiresAt datetime
+  revokedAt datetime [note: 'null while active']
+  rotatedAt datetime [note: 'last refresh']
+}
+
+Table RefreshToken {
+  id guid [pk]
+  sessionId guid [ref: > Session.id]
+  refreshTokenHash string [note: 'a previously-used token for this session']
+  rotatedAt datetime
 }
