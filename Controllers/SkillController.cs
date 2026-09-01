@@ -56,8 +56,8 @@ public class SkillController : ControllerBase
         if (skill == null) return BadRequest("Invalid skill category.");
 
         return CreatedAtAction(
-            "GetSkillByIdAsync",
-            new { Id = skill.Id },
+            "GetSkillById",
+            new { skill.Id },
             new SkillDto
             {
                 Id = skill.Id,
