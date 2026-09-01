@@ -14,7 +14,16 @@ public class ExperienceController : ControllerBase
 
     public ExperienceController(IExperienceService experienceService)
     {
-        _experienceService = experienceService;        
+        _experienceService = experienceService;
+    }
+
+    [HttpGet("{id}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetExperienceByIdAsync([FromRoute] Guid id)
+    {
+        var experience = await _experienceService.GetExperienceByIdAsync(id);
+        if (experience == null) return NotFound();
+        return Ok(experience);
     }
 
     [HttpGet]
@@ -27,11 +36,11 @@ public class ExperienceController : ControllerBase
 
     [HttpPost]
     public async Task<IActionResult> AddExperienceAsync(
-        [FromBody] ExperienceDto experienceDto)
+        [FromBody] ExperienceAddDto experienceAddDto)
     {
-        var experience = await _experienceService
-            .AddExperienceAsync(experienceDto);
+        var experience = await _experienceService.AddExperienceAsync(experienceAddDto);
+        if (experience == null) return BadRequest("Incorrect SkillId provided.");
 
-        return Ok(experience);
+        return CreatedAtAction("GetExperienceById", new { Id = experience.Id }, experience);
     }
 }

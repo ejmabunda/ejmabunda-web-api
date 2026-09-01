@@ -18,16 +18,16 @@ public class ExperienceRepository : IExperienceRepository
 
     public async Task<Experience> AddExperienceAsync(Experience experience)
     {
-        try 
-        { 
-            await _context.Experiences.AddAsync(experience); 
-            await _context.SaveChangesAsync(); 
-            
+        try
+        {
+            await _context.Experiences.AddAsync(experience);
+            await _context.SaveChangesAsync();
+
             return experience;
         }
         catch (DbUpdateException e) when (e.InnerException is SqlException)
         {
-            _logger.LogError(e, "An error occurred during an DB experience add operation.");
+            _logger.LogError(e, "An error occurred during a DB experience add operation.");
             throw;
         }
     }
@@ -35,7 +35,18 @@ public class ExperienceRepository : IExperienceRepository
     public async Task<List<Experience>> GetAllExperiencesAsync()
     {
         return await _context.Experiences
+            .Include(e => e.ExperienceSkills).ThenInclude(es => es.Skill)
+            .OrderByDescending(e => e.StartDate)
+            .AsNoTracking()
+            .ToListAsync();
+    }
+
+    public async Task<Experience?> GetExperienceByIdAsync(Guid id)
+    {
+        return await _context.Experiences
             .Include(e => e.ExperienceSkills)
-                .ThenInclude(es => es.Skill).ToListAsync();
+            .ThenInclude(es => es.Skill)
+            .AsNoTracking()
+            .FirstOrDefaultAsync(e => e.Id == id);
     }
 }
