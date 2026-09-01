@@ -5,6 +5,7 @@ namespace ejmabunda_web_api.Services;
 
 public interface IExperienceService
 {
-    Task<List<Experience>> GetAllExperiencesAsync();
-    Task<Experience> AddExperienceAsync(ExperienceDto experienceDto);
+    Task<ExperienceDto?> GetExperienceByIdAsync(Guid id);
+    Task<List<ExperienceDto>> GetAllExperiencesAsync();
+    Task<ExperienceDto?> AddExperienceAsync(ExperienceAddDto experienceDto);
 }

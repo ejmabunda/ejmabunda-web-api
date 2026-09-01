@@ -115,7 +115,7 @@ Designed cross-client HTML email templates (including Outlook/VML fallbacks) for
             new Skill { Id = new Guid("53B177D5-F4AF-42B2-89FD-08DF07C4F846"), Name = "Code review", SkillCategory = SkillCategory.TestingAndReliability },
 
             // Cloud & DevOps
-            new Skill { Id = new Guid("01403ABA-4A87-4A20-89FE-08DF07C4F846"), Name = "AWS (CloudFormation, ECS, Fargate)", SkillCategory = SkillCategory.CloudAndDevOps },
+            new Skill { Id = new Guid("9f1ac98a-d659-4bb5-afe8-b5b859516f59"), Name = "AWS (CloudFormation, ECS, Fargate)", SkillCategory = SkillCategory.CloudAndDevOps },
             new Skill { Id = new Guid("2571F576-4632-40EF-89FF-08DF07C4F846"), Name = "CI/CD pipelines", SkillCategory = SkillCategory.CloudAndDevOps },
             new Skill { Id = new Guid("797D239C-F2DB-49A8-8A00-08DF07C4F846"), Name = "Docker", SkillCategory = SkillCategory.CloudAndDevOps },
             new Skill { Id = new Guid("EA5743A7-0DF7-4956-8A01-08DF07C4F846"), Name = "Git", SkillCategory = SkillCategory.CloudAndDevOps },

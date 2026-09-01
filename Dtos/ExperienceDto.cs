@@ -12,5 +12,17 @@ public class ExperienceDto
     /// <summary>Null while the role is ongoing.</summary>
     public DateTime? EndDate { get; set; }
     public required string Description { get; set; }
+    public required List<SkillDto> Skills { get; set; }
+}
+
+public class ExperienceAddDto
+{
+    public required string JobTitle { get; set; }
+    public required string Employer { get; set; }
+    public required DateTime StartDate { get; set; }
+
+    /// <summary>Null while the role is ongoing.</summary>
+    public DateTime? EndDate { get; set; }
+    public required string Description { get; set; }
     public required List<Guid> SkillIds { get; set; }
 }
