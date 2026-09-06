@@ -30,12 +30,44 @@ jobs:
       - name: Publish
         run: dotnet publish -c Release -o ./publish --no-build
 
+      - name: Install EF Core tools
+        run: |
+          dotnet tool install --global dotnet-ef --version 10.0.11
+          echo "$HOME/.dotnet/tools" >> "$GITHUB_PATH"
+
       - name: Azure login
         uses: azure/login@v2
         with:
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Open SQL firewall for the runner
+        run: |
+          RUNNER_IP="$(curl -sf https://api.ipify.org)"
+          echo "Runner public IP: $RUNNER_IP"
+          az sql server firewall-rule create \
+            --resource-group "${{ secrets.AZURE_RESOURCE_GROUP }}" \
+            --server "${{ secrets.AZURE_SQL_SERVER_NAME }}" \
+            --name "gha-migrate-${{ github.run_id }}" \
+            --start-ip-address "$RUNNER_IP" \
+            --end-ip-address "$RUNNER_IP"
+
+      - name: Apply database migrations
+        run: >
+          dotnet ef database update
+          --configuration Release --no-build
+          --connection "$DATABASE_CONNECTION_STRING"
+        env:
+          DATABASE_CONNECTION_STRING: ${{ secrets.PORTFOLIO_DATABASE_CONNECTION_STRING }}
+
+      - name: Close SQL firewall for the runner
+        if: always()
+        run: |
+          az sql server firewall-rule delete \
+            --resource-group "${{ secrets.AZURE_RESOURCE_GROUP }}" \
+            --server "${{ secrets.AZURE_SQL_SERVER_NAME }}" \
+            --name "gha-migrate-${{ github.run_id }}"
 
       - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v3
