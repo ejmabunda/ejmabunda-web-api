@@ -46,6 +46,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero,
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration.GetSection("ApiSettings")["ApiUrl"]!.ToString(),
             ValidAudience = builder.Configuration.GetSection("ApiSettings")["ApiUrl"]!.ToString(),

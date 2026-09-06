@@ -41,12 +41,50 @@ public class ExperienceRepository : IExperienceRepository
             .ToListAsync();
     }
 
-    public async Task<Experience?> GetExperienceByIdAsync(Guid id)
+    public async Task<Experience?> GetExperienceByIdAsync(Guid id, bool asNoTracking = true)
     {
-        return await _context.Experiences
-            .Include(e => e.ExperienceSkills)
-            .ThenInclude(es => es.Skill)
-            .AsNoTracking()
+        return asNoTracking ? 
+            await _context.Experiences
+                .Include(e => e.ExperienceSkills)
+                .ThenInclude(es => es.Skill)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(e => e.Id == id) : 
+            await _context.Experiences
+                .Include(e => e.ExperienceSkills)
+                .ThenInclude(es => es.Skill)
+                .FirstOrDefaultAsync(e => e.Id == id);
+    }
+
+    public async Task<Experience> UpdateExperienceAsync(Experience experience)
+    {
+        try
+        {
+            await _context.SaveChangesAsync();
+
+            return experience;
+        } catch (DbUpdateException e) when (e.InnerException is SqlException)
+        {
+            _logger.LogError(e, "An error occurred during a DB experience update operation.");
+            throw;
+        }
+    }
+
+    public async Task<Experience?> DeleteExperienceAsync(Guid id)
+    {
+        var experience = await _context.Experiences
             .FirstOrDefaultAsync(e => e.Id == id);
+
+        try
+        {
+            if (experience == null) return null;
+            _context.Experiences.Remove(experience);
+            await _context.SaveChangesAsync();
+
+            return experience;
+        } catch (DbUpdateException e) when (e.InnerException is SqlException)
+        {
+            _logger.LogError(e, "An error occurred during a DB remove experience operation.");
+            throw;
+        }
     }
 }
