@@ -57,7 +57,7 @@ flowchart TB
     migrate --> sql
 ```
 
-The frontend calls the API directly from the browser (CORS-restricted to `ApiSettings:FrontendUrl`, see [Configuration](#configuration)). Migrations are applied manually against Azure SQL; there's no migration step in [`deploy.yaml`](.github/workflows/deploy.yaml).
+The frontend calls the API directly from the browser (CORS-restricted to `ApiSettings:FrontendUrl`, see [Configuration](#configuration)). [`deploy.yaml`](.github/workflows/deploy.yaml) runs `dotnet ef database update` against Azure SQL before deploying, using the `PORTFOLIO_DATABASE_CONNECTION_STRING` secret.
 
 ## Getting started
 
@@ -152,11 +152,27 @@ docs/erd/        Entity relationship diagram (dbml source + generated svg)
 
 ## Deployment
 
-Pushes to `main` trigger [`.github/workflows/deploy.yaml`](.github/workflows/deploy.yaml), which builds, publishes, and deploys to Azure App Service. Authentication uses OIDC via a federated Entra ID app registration — no stored Azure credentials.
+Pushes to `main` trigger [`.github/workflows/deploy.yaml`](.github/workflows/deploy.yaml), which builds, publishes, applies migrations, and deploys to Azure App Service. Azure authentication uses OIDC via a federated Entra ID app registration — no stored Azure credentials.
 
-Schema changes require a migration to be applied to the Azure database before/around deploy:
+Because Azure SQL's firewall blocks the GitHub-hosted runner, the migration step opens a temporary firewall rule for the runner's public IP (named `gha-migrate-<run id>`) and removes it afterwards, even on failure.
+
+Required repository secrets:
+
+| Secret | Used for |
+| --- | --- |
+| `AZURE_CLIENT_ID` / `AZURE_TENANT_ID` / `AZURE_SUBSCRIPTION_ID` | OIDC login for `az` and the deploy |
+| `PORTFOLIO_DATABASE_CONNECTION_STRING` | `dotnet ef database update` target (SQL auth) |
+| `AZURE_RESOURCE_GROUP` | Resource group holding the SQL server |
+| `AZURE_SQL_SERVER_NAME` | Logical SQL server name (no `.database.windows.net`) |
+
+The deploy applies committed migrations automatically (the **Apply database migrations** step). Authoring a new migration is still manual:
 
 ```bash
 dotnet ef migrations add <Name>
+```
+
+Commit it and push to `main`; the workflow runs `dotnet ef database update` against Azure SQL before the app is deployed, so the schema is ready for the new code. To apply one by hand:
+
+```bash
 dotnet ef database update --connection "<azure connection string>"
 ```
