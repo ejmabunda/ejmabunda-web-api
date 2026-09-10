@@ -11,6 +11,7 @@ Live at `https://ejmabunda-web-api-dfg5bzfbh2c8e3h5.southafricanorth-01.azureweb
 - JWT bearer authentication (RSA-signed) with database-backed refresh tokens, issued via `/api/Auth`
 - NSwag / OpenAPI (Swagger UI in development)
 - GitHub Actions → Azure App Service (OIDC, no stored secrets)
+- Azure Logic App (scheduled keep-alive ping for the free-tier App Service)
 
 ## Architecture
 
@@ -33,9 +34,11 @@ flowchart TB
     end
 
     subgraph backend["Backend (Azure)"]
-        appservice["App Service Web App<br/>JWT bearer auth, secure by default"]
+        appservice["App Service Web App<br/>F1 tier, JWT bearer auth, secure by default"]
         sql[("Azure SQL Server<br/>serverless, AAD + SQL auth")]
+        logicapp["Logic App<br/>Recurrence trigger, every 15 min"]
         appservice <--> sql
+        logicapp -->|"keep-alive ping (GET /api/Skill)"| appservice
     end
 
     subgraph dev["Development (local / Codespace)"]
@@ -58,6 +61,8 @@ flowchart TB
 ```
 
 The frontend calls the API directly from the browser (CORS-restricted to `ApiSettings:FrontendUrl`, see [Configuration](#configuration)). Migrations are applied manually against Azure SQL; there's no migration step in [`deploy.yaml`](.github/workflows/deploy.yaml).
+
+The app runs on the App Service **F1 (free) tier**, which has no Always On, so an idle instance cold-starts (~30–60s). A separate Azure **Logic App** pings a public endpoint every 15 minutes to keep the instance warm — see [ADR-007](docs/decisions/ADR-007.md) and [ADR-008](docs/decisions/ADR-008.md), with the workflow definition in [`infrastructure/`](infrastructure/).
 
 ## Getting started
 
@@ -126,13 +131,27 @@ The profile is a **singleton** — always zero or one row, so these actions oper
 
 `SkillCategory` is an enum: request bodies bind it as the backing **integer** (`0`–`4`), responses serialize it as the **name** (`"Platform"`).
 
+### Experience (`/api/Experience`)
+
+Work-history entries, each with a set of linked `Skill` ids.
+
+| Method | Route | Auth | Description |
+| --- | --- | --- | --- |
+| `GET` | `/api/Experience` | Anonymous | Lists all experiences, newest first (`200 []` when empty) |
+| `GET` | `/api/Experience/{id}` | Anonymous | Returns one experience with its skills, or `404` |
+| `POST` | `/api/Experience` | Required | Creates an experience; `400` if any skill id is unknown |
+| `PUT` | `/api/Experience/{id}` | Required | Updates an experience; omitted scalar fields are left unchanged |
+| `DELETE` | `/api/Experience/{id}` | Required | Deletes an experience; `204` on success |
+
+On `PUT`, `skillIds` is `null` to leave the linked skills untouched, `[]` to clear them, or a populated list to mirror it exactly. Unknown skill ids give a `400`.
+
 Full request/response shapes are documented via XML doc comments on the controllers and DTOs, and surfaced in Swagger UI.
 
 ## Data model
 
 Source of truth: [`docs/erd/portfolio-erd.dbml`](docs/erd/portfolio-erd.dbml) (edit here, then paste into [dbdiagram.io](https://dbdiagram.io) to regenerate the SVG below).
 
-`Profile` and `Skill` have full CRUD controllers. `User` and `Session` back `/api/Auth` (no dedicated controller). The remaining entities exist in the schema ahead of their own endpoints.
+`Profile`, `Skill`, and `Experience` have full CRUD controllers. `User` and `Session` back `/api/Auth` (no dedicated controller). `Qualification`, `Project`, and `Certification` (and their skill join tables) exist in the schema ahead of their own endpoints.
 
 ![Portfolio API entity relationship diagram](docs/erd/portfolio-erd.svg)
 
@@ -145,7 +164,10 @@ Services/      Business logic, one interface + implementation per feature
 Repositories/  EF Core data access, one interface + implementation per feature
 Models/        Domain entities and shared models (e.g. ApiSettings, Token, Session)
 Data/          The PortfolioContext DbContext (EF Core)
+Exceptions/    Custom exceptions (e.g. InvalidSkillIdsException)
+Filters/       MVC filters (e.g. exception-to-400 translation)
 Migrations/    EF Core migrations
+infrastructure/  Azure resource templates (ARM) — the keep-alive Logic App
 docs/decisions/  Architecture decision records
 docs/erd/        Entity relationship diagram (dbml source + generated svg)
 ```
@@ -153,6 +175,8 @@ docs/erd/        Entity relationship diagram (dbml source + generated svg)
 ## Deployment
 
 Pushes to `main` trigger [`.github/workflows/deploy.yaml`](.github/workflows/deploy.yaml), which builds, publishes, and deploys to Azure App Service. Authentication uses OIDC via a federated Entra ID app registration — no stored Azure credentials.
+
+The keep-alive **Logic App** is a separate Azure resource, not part of this pipeline. It's managed in the portal; [`infrastructure/logicapp_keepalive.json`](infrastructure/logicapp_keepalive.json) is a hand-exported ARM snapshot kept for reference, so portal edits won't flow back to the repo automatically. If the App Service hostname changes, update the ping URL in the Logic App.
 
 Schema changes require a migration to be applied to the Azure database before/around deploy:
 
