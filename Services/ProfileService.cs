@@ -19,6 +19,7 @@ public class ProfileService : IProfileService
         return await _repository.AddProfileAsync(profileDto);
     }
 
+    /// <inheritdoc/>
     public async Task<Profile?> UpdateProfileAsync(ProfilePutDto profileDto)
     {
         var profile = await _repository.GetProfileAsync();
@@ -28,6 +29,7 @@ public class ProfileService : IProfileService
         return profile;
     }
 
+    /// <inheritdoc/>
     public async Task<Profile?> DeleteProfileAsync()
     {
         Profile? profile;

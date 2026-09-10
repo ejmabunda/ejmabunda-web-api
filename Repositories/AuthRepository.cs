@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ejmabunda_web_api.Repositories;
 
+/// <inheritdoc cref="IAuthRepository"/>
 public class AuthRepository : IAuthRepository
 {
     private readonly PortfolioContext _context;

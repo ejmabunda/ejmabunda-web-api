@@ -5,6 +5,7 @@ using ejmabunda_web_api.Repositories;
 
 namespace ejmabunda_web_api.Services;
 
+/// <inheritdoc cref="IExperienceService"/>
 public class ExperienceService : IExperienceService
 {
     private readonly IExperienceRepository _experienceRepository;

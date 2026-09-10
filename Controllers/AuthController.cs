@@ -5,6 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ejmabunda_web_api.Controllers;
 
+/// <summary>
+/// Authentication endpoints for the single admin <see cref="User"/>. Login verifies a
+/// password and issues a short-lived JWT access token plus an <c>httpOnly</c>
+/// refresh-token cookie (<c>X-Refresh-Token</c>); refresh rotates both; logout revokes
+/// the session. See <c>docs/decisions/ADR-001.md</c> and <c>ADR-002.md</c> for the design.
+/// </summary>
 [Route("api/[controller]")]
 [ApiController]
 public class AuthController : ControllerBase
@@ -23,6 +29,15 @@ public class AuthController : ControllerBase
         _authService = authService;
     }
 
+    /// <summary>
+    /// Verifies the submitted password against the admin user and starts a session.
+    /// On success the JWT access token is returned in the body and the refresh-token
+    /// cookie is set. The stored hash is upgraded transparently if its parameters are stale.
+    /// </summary>
+    /// <response code="200">Access token issued; refresh-token cookie set.</response>
+    /// <response code="401">The password was incorrect.</response>
+    /// <response code="404">No admin user has been configured.</response>
+    /// <response code="500">The session could not be persisted.</response>
     [HttpPost("login")]
     public async Task<IActionResult> Login(LoginRequest request)
     {
@@ -52,6 +67,13 @@ public class AuthController : ControllerBase
         return Ok(new { Token = _authService.CreateAccessToken(user) });
     }
 
+    /// <summary>
+    /// Exchanges the <c>X-Refresh-Token</c> cookie for a new access token, rotating the
+    /// refresh cookie. Replaying an already-rotated token revokes the whole session.
+    /// </summary>
+    /// <response code="200">New access token issued; refresh-token cookie rotated.</response>
+    /// <response code="401">The refresh-token cookie is missing.</response>
+    /// <response code="404">The token is unknown, expired, revoked, or was replayed.</response>
     [HttpPost("refresh")]
     public async Task<IActionResult> RefreshToken()
     {
@@ -69,6 +91,8 @@ public class AuthController : ControllerBase
         return Ok(new { Token = _authService.CreateAccessToken(user) });
     }
 
+    /// <summary>Revokes the current session (if any) and clears the refresh-token cookie.</summary>
+    /// <response code="200">Logged out. Also returned when no valid session was found.</response>
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {
@@ -83,6 +107,10 @@ public class AuthController : ControllerBase
         return Ok("Logged out successfully");
     }
 
+    /// <summary>
+    /// Writes <paramref name="refreshToken"/> as the <c>X-Refresh-Token</c> cookie:
+    /// <c>httpOnly</c>, <c>Secure</c>, <c>SameSite=None</c>, 7-day expiry.
+    /// </summary>
     public void SetRefreshTokenCookie(string refreshToken)
     {
         var cookieOptions = new CookieOptions()
