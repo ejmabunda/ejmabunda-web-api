@@ -1,0 +1,43 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "resources": [
+        {
+            "type": "Microsoft.Logic/workflows",
+            "apiVersion": "2017-07-01",
+            "name": "keep-api-alive",
+            "location": "southafricanorth",
+            "properties": {
+                "state": "Enabled",
+                "definition": {
+                    "metadata": {
+                        "notes": {}
+                    },
+                    "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
+                    "contentVersion": "1.0.0.0",
+                    "triggers": {
+                        "Recurrence": {
+                            "recurrence": {
+                                "interval": 15,
+                                "frequency": "Minute"
+                            },
+                            "type": "Recurrence"
+                        }
+                    },
+                    "actions": {
+                        "HTTP": {
+                            "runAfter": {},
+                            "type": "Http",
+                            "inputs": {
+                                "uri": "https://ejmabunda-web-api-dfg5bzfbh2c8e3h5.southafricanorth-01.azurewebsites.net/api/skill",
+                                "method": "GET"
+                            }
+                        }
+                    },
+                    "outputs": {}
+                }
+            }
+        }
+    ]
+}
