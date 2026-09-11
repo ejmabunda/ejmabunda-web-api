@@ -19,7 +19,7 @@
                     "triggers": {
                         "Recurrence": {
                             "recurrence": {
-                                "interval": 15,
+                                "interval": 20,
                                 "frequency": "Minute"
                             },
                             "type": "Recurrence"
