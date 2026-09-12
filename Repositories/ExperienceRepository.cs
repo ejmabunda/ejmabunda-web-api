@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ejmabunda_web_api.Repositories;
 
+/// <inheritdoc cref="IExperienceRepository"/>
 public class ExperienceRepository : IExperienceRepository
 {
     private readonly PortfolioContext _context;

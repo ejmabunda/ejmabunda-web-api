@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ejmabunda_web_api.Models;
 
@@ -11,9 +12,11 @@ using ejmabunda_web_api.Models;
 namespace ejmabunda_web_api.Migrations
 {
     [DbContext(typeof(PortfolioContext))]
-    partial class PortfolioContextModelSnapshot : ModelSnapshot
+    [Migration("20260912101142_RefineProfileSeed")]
+    partial class RefineProfileSeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -230,9 +233,9 @@ namespace ejmabunda_web_api.Migrations
                         new
                         {
                             Id = 1,
-                            Headline = "Full Stack .NET Developer",
-                            Subtitle = "Full Stack .NET Developer with production experience architecting ASP.NET Core APIs, automated CI/CD pipelines, and cloud-native infrastructure on Azure. Proven ability to stabilize legacy systems, implement automated testing, and deliver full end-to-end enterprise features. Strong foundation in C#, SQL Server, and modern React/Next.js frontend architectures.",
-                            Title = "Software Developer"
+                            Headline = "Software Developer",
+                            Subtitle = "Software Developer Developer with production experience architecting ASP.NET Core APIs, automated CI/CD pipelines, and cloud-native infrastructure on Azure. Proven ability to stabilize legacy systems, implement automated testing, and deliver full end-to-end enterprise features. Strong foundation in C#, SQL Server, and modern React/Next.js frontend architectures.",
+                            Title = "Matimu Mabunda"
                         });
                 });
 

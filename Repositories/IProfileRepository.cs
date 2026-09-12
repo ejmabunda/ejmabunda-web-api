@@ -13,7 +13,9 @@ public interface IProfileRepository
     /// </summary>
     Task<Profile?> AddProfileAsync(ProfileAddDto profileDto);
 
+    /// <summary>Applies the non-null fields of <paramref name="profileDto"/> to <paramref name="profile"/> and saves.</summary>
     Task<Profile> UpdateProfileAsync(Profile profile, ProfilePutDto profileDto);
 
+    /// <summary>Removes the given profile row.</summary>
     Task<Profile?> DeleteProfileAsync(Profile profile);
 }

@@ -3,6 +3,7 @@ using ejmabunda_web_api.Repositories;
 
 namespace ejmabunda_web_api.Services;
 
+/// <inheritdoc cref="IUserService"/>
 public class UserService : IUserService
 {
     private readonly IUserRepository _userRepository;

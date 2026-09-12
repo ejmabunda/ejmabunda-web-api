@@ -4,6 +4,7 @@ using ejmabunda_web_api.Repositories;
 
 namespace ejmabunda_web_api.Services;
 
+/// <inheritdoc cref="ISkillService"/>
 public class SkillService : ISkillService
 {
     private readonly ISkillRepository _skillRepository;

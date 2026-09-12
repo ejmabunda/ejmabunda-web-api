@@ -2,6 +2,7 @@ using ejmabunda_web_api.Models;
 
 namespace ejmabunda_web_api.Dtos;
 
+/// <summary>API representation of an <see cref="Experience"/> with its linked skills.</summary>
 public class ExperienceDto
 {
     public Guid Id { get; set; }
@@ -15,6 +16,7 @@ public class ExperienceDto
     public required List<SkillDto> Skills { get; set; }
 }
 
+/// <summary>Request body for creating an <see cref="Experience"/>.</summary>
 public class ExperienceAddDto
 {
     public required string JobTitle { get; set; }
@@ -27,6 +29,7 @@ public class ExperienceAddDto
     public required List<Guid> SkillIds { get; set; }
 }
 
+/// <summary>Request body for updating an <see cref="Experience"/>. Null scalar fields are left unchanged.</summary>
 public class ExperienceUpdateDto
 {
     public string? JobTitle { get; set; }
