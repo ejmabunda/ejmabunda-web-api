@@ -11,7 +11,12 @@ public interface IProfileService
     /// </summary>
     Task<Profile?> AddProfileAsync(ProfileAddDto profileDto);
 
+    /// <summary>
+    /// Updates the profile, leaving fields omitted from <paramref name="profileDto"/>
+    /// unchanged. Returns <see langword="null"/> if no profile exists yet.
+    /// </summary>
     Task<Profile?> UpdateProfileAsync(ProfilePutDto profileDto);
 
+    /// <summary>Deletes the profile. Returns <see langword="null"/> if no profile exists.</summary>
     Task<Profile?> DeleteProfileAsync();
 }

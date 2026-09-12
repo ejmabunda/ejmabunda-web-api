@@ -71,6 +71,7 @@ public class ProfileRepository : IProfileRepository
         }
     }
 
+    /// <inheritdoc/>
     public async Task<Profile?> DeleteProfileAsync(Profile profile)
     {
         try

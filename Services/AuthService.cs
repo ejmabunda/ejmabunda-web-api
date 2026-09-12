@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace ejmabunda_web_api.Services;
 
+/// <inheritdoc cref="IAuthService"/>
 public class AuthService : IAuthService
 {
     private readonly SecurityKey _privateKey;
@@ -68,6 +69,10 @@ public class AuthService : IAuthService
         return randomToken;
     }
 
+    /// <summary>
+    /// Computes the HMAC-SHA256 hash (hex) of a raw token using the configured key.
+    /// This hash is what gets stored and compared; the raw token is never persisted.
+    /// </summary>
     public string HashToken(string rawToken)
     {
         if (string.IsNullOrWhiteSpace(rawToken))
@@ -81,6 +86,7 @@ public class AuthService : IAuthService
         return Convert.ToHexString(hashBytes);
     }
 
+    /// <summary>Generates a 64-byte cryptographically-random token, Base64-encoded.</summary>
     private string GenerateSecureRandomToken()
     {
         return Convert.ToBase64String(RandomNumberGenerator.GetBytes(64));
@@ -92,6 +98,10 @@ public class AuthService : IAuthService
         return await _authRepository.GetSessionAsync(refreshTokenHash);
     }
 
+    /// <summary>
+    /// Finds a session whose already-rotated ("previous") token hashes contain this
+    /// token — i.e. a replayed refresh token. Used to detect reuse and revoke the session.
+    /// </summary>
     public async Task<Session?> GetAffectedSession(string refreshToken)
     {
         var sessions = await _authRepository.GetAllSessionsAsync();
