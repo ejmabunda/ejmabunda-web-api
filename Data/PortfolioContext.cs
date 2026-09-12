@@ -42,9 +42,9 @@ public class PortfolioContext : DbContext
         modelBuilder.Entity<Profile>().HasData(
             new Profile()
             {
-                Title = "Software Developer",
-                Headline = "Full Stack .NET Developer",
-                Subtitle = "Full Stack .NET Developer with production experience architecting ASP.NET Core APIs, automated CI/CD pipelines, and cloud-native infrastructure on Azure. Proven ability to stabilize legacy systems, implement automated testing, and deliver full end-to-end enterprise features. Strong foundation in C#, SQL Server, and modern React/Next.js frontend architectures."
+                Title = "Matimu Mabunda",
+                Headline = "Software Developer",
+                Subtitle = "Software Developer Developer with production experience architecting ASP.NET Core APIs, automated CI/CD pipelines, and cloud-native infrastructure on Azure. Proven ability to stabilize legacy systems, implement automated testing, and deliver full end-to-end enterprise features. Strong foundation in C#, SQL Server, and modern React/Next.js frontend architectures."
             }
         );
 
