@@ -4,6 +4,12 @@ A .NET 10 Web API backing a personal portfolio site — profile, experience, qua
 
 Live at `https://ejmabunda-web-api-dfg5bzfbh2c8e3h5.southafricanorth-01.azurewebsites.net`.
 
+## Demo
+
+The admin CRUD flows (`POST`/`PUT`/`DELETE` on Profile, Skill, Experience) are JWT-protected, so there's no public login to try them against the live API. Here's what authenticated admin usage looks like end to end:
+
+![Admin CRUD demo](docs/media/admin-crud-demo.gif)
+
 ## Tech stack
 
 - ASP.NET Core 10 (Web API, controllers)
