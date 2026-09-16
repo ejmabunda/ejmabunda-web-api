@@ -11,6 +11,7 @@ public class Qualification
     /// <summary>Null while the qualification is still in progress.</summary>
     public DateTime? EndDate { get; set; }
     public required NqfLevel NqfLevel { get; set; }
+    public List<QualificationSkill> Skills { get; set; } = [];
 }
 
 /// <summary>Join entity linking a <see cref="Qualification"/> to a <see cref="Skill"/> it covers.</summary>

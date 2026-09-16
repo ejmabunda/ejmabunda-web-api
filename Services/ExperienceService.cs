@@ -101,7 +101,7 @@ public class ExperienceService : IExperienceService
         experience.JobTitle = experienceUpdateDto.JobTitle ?? experience.JobTitle;
         experience.Employer = experienceUpdateDto.Employer ?? experience.Employer;
         experience.StartDate = experienceUpdateDto.StartDate ?? experience.StartDate;
-        experience.EndDate = experienceUpdateDto.EndDate ?? experience.EndDate;
+        experience.EndDate = experienceUpdateDto.EndDate;
         experience.Description = experienceUpdateDto.Description ?? experience.Description;
 
         // SkillIds: null => leave links untouched; [] => clear all; populated => mirror it.
