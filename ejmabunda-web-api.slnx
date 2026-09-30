@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="ejmabunda-web-api.Tests/ejmabunda-web-api.Tests.csproj" />
+  <Project Path="ejmabunda-web-api/ejmabunda-web-api.csproj" />
+</Solution>
