@@ -1,0 +1,8 @@
+$kind: collection
+name: Auth
+description: |-
+  Authentication endpoints. Login issues a short-lived JWT access token in the response
+  body and sets an httpOnly X-Refresh-Token cookie (7-day expiry). Refresh rotates both
+  tokens. Logout revokes the session and clears the cookie.
+  These endpoints do not require a Bearer token.
+order: 1000

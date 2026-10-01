@@ -1,0 +1,6 @@
+$kind: collection
+name: Profile
+description: |-
+  Singleton profile resource. GET is public (AllowAnonymous). POST, PUT, and DELETE
+  require a valid JWT Bearer token (inherited from the collection).
+order: 2000

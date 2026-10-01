@@ -1,0 +1,29 @@
+$kind: http-request
+name: Login
+method: POST
+url: "{{baseUrl}}/api/Auth/login"
+order: 1000
+auth:
+  type: noauth
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "password": "{{vault:adminPassword}}"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      const response = pm.response.json();
+      const token = response.token.accessToken;
+
+      pm.test("Login response contains a JWT", function () {
+        pm.expect(token).to.be.a("string").and.not.empty;
+      });
+
+      if (token) {
+        await pm.vault.set("JwtToken", token);
+      }
+    language: text/javascript

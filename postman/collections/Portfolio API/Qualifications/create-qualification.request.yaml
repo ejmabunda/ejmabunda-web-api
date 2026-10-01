@@ -1,0 +1,24 @@
+$kind: http-request
+name: Create Qualification
+method: POST
+url: "{{baseUrl}}/api/Qualification"
+auth:
+  type: bearer
+  credentials:
+    token: "{{vault:JwtToken}}"
+order: 3000
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Bachelor of Science in Computer Science",
+      "institution": "University of Example",
+      "startDate": "2020-01-01T00:00:00Z",
+      "endDate": null,
+      "nqfLevel": 7,
+      "skillIds": [
+        "FF87C78A-3A06-4160-89E9-08DF07C4F846"
+      ]
+    }

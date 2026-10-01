@@ -1,0 +1,15 @@
+$kind: http-request
+name: Create Skill
+method: POST
+url: '{{baseUrl}}/api/Skill'
+order: 3000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "C#",
+      "skillCategory": 0
+    }

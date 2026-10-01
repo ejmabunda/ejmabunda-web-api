@@ -1,0 +1,25 @@
+$kind: http-request
+name: Update Qualification
+method: PUT
+url: '{{baseUrl}}/api/Qualification/:id'
+order: 4000
+headers:
+  - key: Content-Type
+    value: application/json
+pathVariables:
+  - key: id
+    value: '00000000-0000-0000-0000-000000000000'
+    description: GUID of the qualification to update
+body:
+  type: json
+  content: |-
+    {
+      "name": "Bachelor of Science in Computer Science",
+      "institution": "University of Example",
+      "startDate": "2020-01-01T00:00:00Z",
+      "endDate": "2022-12-01T00:00:00Z",
+      "nqfLevel": 7,
+      "skillIds": [
+        "00000000-0000-0000-0000-000000000000"
+      ]
+    }
