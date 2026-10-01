@@ -17,7 +17,6 @@ public class Qualification
 /// <summary>Join entity linking a <see cref="Qualification"/> to a <see cref="Skill"/> it covers.</summary>
 public class QualificationSkill
 {
-    public Guid Id { get; set; }
     public Guid QualificationId { get; set; }
     public Guid SkillId { get; set; }
     public Qualification Qualification { get; set; } = null!;

@@ -209,5 +209,75 @@ Designed cross-client HTML email templates (including Outlook/VML fallbacks) for
                 SkillId = new Guid("BCE7603B-066C-4E06-89FC-08DF07C4F846")   // Root-cause analysis
             }
         );
+
+        // seed qualifications
+        modelBuilder.Entity<Qualification>().HasData(
+            new Qualification
+            {
+                Id = new Guid("af1ca55f-3d3e-4a66-b743-cdd9b5bbba0c"),
+                Name = "National Senior Certificate",
+                Institution = "Ponelopele Oracle Secondary School",
+                StartDate = new DateTime(2017, 12, 01),
+                EndDate = new DateTime(2017, 12, 01),
+                NqfLevel = NqfLevel.Grade12
+            },
+            new Qualification
+            {
+                Id = new Guid("a774c9bc-61f5-4309-a53a-4da9d11494ec"),
+                Name = "Occupational Certificate: Software Engineer",
+                Institution = "WeThinkCode_",
+                StartDate = new DateTime(2024, 01, 01),
+                EndDate = new DateTime(2025, 01, 01),
+                NqfLevel = NqfLevel.Diploma
+            }
+        );
+
+        // seed qualification skills (the National Senior Certificate has none)
+        modelBuilder.Entity<QualificationSkill>()
+            .HasKey(qs => new { qs.QualificationId, qs.SkillId });
+
+        modelBuilder.Entity<QualificationSkill>().HasData(
+            // occupational certificate: software engineer, WTC
+            new QualificationSkill
+            {
+                QualificationId = new Guid("a774c9bc-61f5-4309-a53a-4da9d11494ec"),
+                SkillId = new Guid("B87602AE-295B-4EBA-89F0-08DF07C4F846")   // Python
+            },
+            new QualificationSkill
+            {
+                QualificationId = new Guid("a774c9bc-61f5-4309-a53a-4da9d11494ec"),
+                SkillId = new Guid("7154A018-BD1D-4E0D-89F1-08DF07C4F846")   // SQL Server
+            },
+            new QualificationSkill
+            {
+                QualificationId = new Guid("a774c9bc-61f5-4309-a53a-4da9d11494ec"),
+                SkillId = new Guid("DA81DC14-30C0-4A77-89EE-08DF07C4F846")   // T-SQL
+            },
+            new QualificationSkill
+            {
+                QualificationId = new Guid("a774c9bc-61f5-4309-a53a-4da9d11494ec"),
+                SkillId = new Guid("A34486D1-1E35-4E6B-89F3-08DF07C4F846")   // Data Modelling
+            },
+            new QualificationSkill
+            {
+                QualificationId = new Guid("a774c9bc-61f5-4309-a53a-4da9d11494ec"),
+                SkillId = new Guid("24E71B43-A73B-4B25-89FA-08DF07C4F846")   // Automated test suite design
+            },
+            new QualificationSkill
+            {
+                QualificationId = new Guid("a774c9bc-61f5-4309-a53a-4da9d11494ec"),
+                SkillId = new Guid("53B177D5-F4AF-42B2-89FD-08DF07C4F846")   // Code review
+            },
+            new QualificationSkill
+            {
+                QualificationId = new Guid("a774c9bc-61f5-4309-a53a-4da9d11494ec"),
+                SkillId = new Guid("2571F576-4632-40EF-89FF-08DF07C4F846")   // CI/CD pipelines
+            },
+            new QualificationSkill
+            {
+                QualificationId = new Guid("a774c9bc-61f5-4309-a53a-4da9d11494ec"),
+                SkillId = new Guid("9f1ac98a-d659-4bb5-afe8-b5b859516f59")   // AWS (CloudFormation, ECS, Fargate)
+            }
+        );
     }
 }
