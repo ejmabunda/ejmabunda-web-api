@@ -29,4 +29,12 @@
     <PackageReference Include="NSwag.AspNetCore" Version="14.7.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- Pins transitive deps of CodeGeneration.Design to the patched release for
+         GHSA-g4vj-cjjj-v7hg (6.12.1 is vulnerable). Remove once the scaffolding
+         package ships with >= 6.12.5. -->
+    <PackageReference Include="NuGet.Packaging" Version="6.12.5" />
+    <PackageReference Include="NuGet.Protocol" Version="6.12.5" />
+  </ItemGroup>
+
 </Project>
