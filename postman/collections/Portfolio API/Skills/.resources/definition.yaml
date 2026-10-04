@@ -1,0 +1,8 @@
+$kind: collection
+name: Skills
+description: |-
+  CRUD for Skill entries. GET endpoints are public (AllowAnonymous). POST, PUT, and
+  DELETE require a valid JWT Bearer token (inherited from the collection).
+  SkillCategory is sent as an integer (0=LanguagesAndBackend, 1=SystemsAndData,
+  2=Platform, 3=TestingAndReliability, 4=CloudAndDevOps) and returned as its name string.
+order: 3000

@@ -1,0 +1,21 @@
+$kind: collection
+name: Portfolio API
+description: |-
+  REST API for the ejmabunda portfolio backend (ASP.NET Core).
+  Base URL is stored in the {{baseUrl}} collection variable.
+  Protected endpoints require a JWT Bearer token — obtain one via POST /api/Auth/login
+  and store it in the {{accessToken}} variable (or use the collection-level Bearer auth).
+variables:
+  - key: baseUrl
+    value: 'https://ejmabunda-web-api-dfg5bzfbh2c8e3h5.southafricanorth-01.azurewebsites.net'
+    description: 'Base URL of the deployed API. Override with http://localhost:<port> for local development.'
+  - key: accessToken
+    value: ''
+    description: 'JWT access token returned by POST /api/Auth/login. Set this after logging in.'
+auth:
+  type: bearer
+  credentials:
+    - key: token
+      value: '{{accessToken}}'
+    - key: addTokenTo
+      value: header
