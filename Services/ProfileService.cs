@@ -20,6 +20,12 @@ public class ProfileService : IProfileService
     }
 
     /// <inheritdoc/>
+    public async Task<Profile?> GetProfileAsync()
+    {
+        return await _repository.GetProfileAsync();
+    }
+
+    /// <inheritdoc/>
     public async Task<Profile?> UpdateProfileAsync(ProfilePutDto profileDto)
     {
         var profile = await _repository.GetProfileAsync();

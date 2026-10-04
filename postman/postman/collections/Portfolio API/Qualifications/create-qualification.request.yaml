@@ -1,0 +1,21 @@
+$kind: http-request
+name: Create Qualification
+method: POST
+url: '{{baseUrl}}/api/Qualification'
+order: 3000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "name": "Bachelor of Science in Computer Science",
+      "institution": "University of Example",
+      "startDate": "2020-01-01T00:00:00Z",
+      "endDate": null,
+      "nqfLevel": 7,
+      "skillIds": [
+        "00000000-0000-0000-0000-000000000000"
+      ]
+    }

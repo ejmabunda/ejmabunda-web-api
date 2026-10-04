@@ -1,0 +1,7 @@
+$kind: http-request
+name: Get All Experiences
+method: GET
+url: '{{baseUrl}}/api/Experience'
+order: 1000
+auth:
+  type: noauth

@@ -1,0 +1,25 @@
+$kind: http-request
+name: Update Experience
+method: PUT
+url: '{{baseUrl}}/api/Experience/:id'
+order: 4000
+headers:
+  - key: Content-Type
+    value: application/json
+pathVariables:
+  - key: id
+    value: '00000000-0000-0000-0000-000000000000'
+    description: GUID of the experience to update
+body:
+  type: json
+  content: |-
+    {
+      "jobTitle": "Senior Software Engineer",
+      "employer": "Acme Corp",
+      "startDate": "2023-01-01T00:00:00Z",
+      "endDate": "2024-12-31T00:00:00Z",
+      "description": "Led backend development and mentored junior engineers.",
+      "skillIds": [
+        "00000000-0000-0000-0000-000000000000"
+      ]
+    }

@@ -1,0 +1,7 @@
+$kind: http-request
+name: Get All Qualifications
+method: GET
+url: '{{baseUrl}}/api/Qualification'
+order: 1000
+auth:
+  type: noauth

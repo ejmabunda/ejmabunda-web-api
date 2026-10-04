@@ -1,0 +1,27 @@
+$kind: collection
+description: |-
+  REST API for the ejmabunda portfolio backend (ASP.NET Core).
+
+  Covers five resource groups:
+
+  - **Auth** – login, token refresh, logout (JWT + httpOnly refresh-token cookie)
+      
+  - **Profile** – singleton profile record (title, headline, subtitle)
+      
+  - **Experience** – work-history entries linked to skills
+      
+  - **Qualifications** – educational qualifications linked to skills
+      
+  - **Skills** – skills / technologies with a category enum
+      
+
+  Reads are public. Writes require a JWT bearer token obtained from **Login**.  
+  The token is stored automatically in the `JwtToken` vault variable by the Login  
+  after-response script and is inherited by all protected requests via the  
+  collection-level bearer auth.
+auth:
+  type: bearer
+  credentials:
+    token: "{{vault:JwtToken}}"
+variables:
+  baseUrl: http://localhost:5000
