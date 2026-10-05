@@ -1,0 +1,11 @@
+$kind: http-request
+name: Get Qualification by ID
+method: GET
+url: '{{baseUrl}}/api/Qualification/:id'
+order: 2000
+auth:
+  type: noauth
+pathVariables:
+  - key: id
+    value: '00000000-0000-0000-0000-000000000000'
+    description: GUID of the qualification to retrieve

@@ -151,13 +151,27 @@ Work-history entries, each with a set of linked `Skill` ids.
 
 On `PUT`, `skillIds` is `null` to leave the linked skills untouched, `[]` to clear them, or a populated list to mirror it exactly. Unknown skill ids give a `400`.
 
+### Qualification (`/api/Qualification`)
+
+Education entries (certificates, diplomas, degrees), each with a set of linked `Skill` ids.
+
+| Method | Route | Auth | Description |
+| --- | --- | --- | --- |
+| `GET` | `/api/Qualification` | Anonymous | Lists all qualifications, newest first (`200 []` when empty) |
+| `GET` | `/api/Qualification/{id}` | Anonymous | Returns one qualification with its skills, or `404` |
+| `POST` | `/api/Qualification` | Required | Creates a qualification; `400` if any skill id is unknown |
+| `PUT` | `/api/Qualification/{id}` | Required | Updates a qualification; omitted scalar fields are left unchanged |
+| `DELETE` | `/api/Qualification/{id}` | Required | Deletes a qualification; `204` on success |
+
+`skillIds` on `PUT` works the same way as for Experience. `nqfLevel` is the South African NQF level: request bodies bind it as the **integer** (`1`–`10`), responses serialize it as the **name** (`"Diploma"`).
+
 Full request/response shapes are documented via XML doc comments on the controllers and DTOs, and surfaced in Swagger UI.
 
 ## Data model
 
 Source of truth: [`docs/erd/portfolio-erd.dbml`](docs/erd/portfolio-erd.dbml) (edit here, then paste into [dbdiagram.io](https://dbdiagram.io) to regenerate the SVG below).
 
-`Profile`, `Skill`, and `Experience` have full CRUD controllers. `User` and `Session` back `/api/Auth` (no dedicated controller). `Qualification`, `Project`, and `Certification` (and their skill join tables) exist in the schema ahead of their own endpoints.
+`Profile`, `Skill`, `Experience`, and `Qualification` have full CRUD controllers. `User` and `Session` back `/api/Auth` (no dedicated controller). `Project` and `Certification` (and their skill join tables) exist in the schema ahead of their own endpoints.
 
 ![Portfolio API entity relationship diagram](docs/erd/portfolio-erd.svg)
 

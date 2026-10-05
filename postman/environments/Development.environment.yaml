@@ -1,0 +1,4 @@
+name: Development
+values:
+  - key: baseUrl
+    value: ''

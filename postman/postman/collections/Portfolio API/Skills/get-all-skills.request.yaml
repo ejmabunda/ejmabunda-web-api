@@ -1,0 +1,7 @@
+$kind: http-request
+name: Get All Skills
+method: GET
+url: '{{baseUrl}}/api/Skill'
+order: 1000
+auth:
+  type: noauth

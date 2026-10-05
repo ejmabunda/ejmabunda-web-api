@@ -57,9 +57,12 @@ Table ExperienceSkill {
 }
 
 Table QualificationSkill {
-  id guid [pk]
   qualificationId guid [ref: > Qualification.id]
   skillId guid [ref: > Skill.id]
+
+  indexes {
+    (qualificationId, skillId) [pk]
+  }
 }
 
 Table ProjectSkill {

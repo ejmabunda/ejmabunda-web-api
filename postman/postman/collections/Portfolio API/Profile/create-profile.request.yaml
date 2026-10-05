@@ -1,0 +1,18 @@
+$kind: http-request
+name: Create Profile
+method: POST
+url: '{{baseUrl}}/api/Profile'
+order: 2000
+auth:
+  type: noauth
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "title": "Software Engineer",
+      "headline": "Building scalable web applications",
+      "subtitle": "Full-stack developer with a passion for clean code"
+    }

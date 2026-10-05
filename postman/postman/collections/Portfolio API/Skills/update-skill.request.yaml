@@ -1,0 +1,16 @@
+$kind: http-request
+name: Update Skill
+method: PUT
+url: '{{baseUrl}}/api/Skill'
+order: 4000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "id": "00000000-0000-0000-0000-000000000000",
+      "name": "C# (.NET 9)",
+      "skillCategory": 0
+    }
