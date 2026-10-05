@@ -29,7 +29,7 @@ namespace ejmabunda_web_api.Controllers
         /// <response code="404">No profile has been created yet.</response>
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<Profile>> GetProfile()
+        public async Task<ActionResult<Profile>> GetProfileAsync()
         {
             var profile = await _service.GetProfileAsync();
 
@@ -43,7 +43,7 @@ namespace ejmabunda_web_api.Controllers
         // PUT: api/Profile
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
-        public async Task<IActionResult> PutProfileAsync([FromBody] ProfilePutDto profileDto)
+        public async Task<ActionResult<Profile>> PutProfileAsync([FromBody] ProfilePutDto profileDto)
         {
             Profile? profile;
             try
