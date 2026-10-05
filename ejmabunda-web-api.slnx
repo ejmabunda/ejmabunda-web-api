@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/ejmabunda-web-api/ejmabunda-web-api.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ejmabunda-web-api.UnitTests/ejmabunda-web-api.UnitTests.csproj" />
+  </Folder>
+</Solution>

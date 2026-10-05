@@ -1,0 +1,5 @@
+$kind: http-request
+name: Delete Profile
+method: DELETE
+url: '{{baseUrl}}/api/Profile'
+order: 4000

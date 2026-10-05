@@ -1,0 +1,16 @@
+$kind: http-request
+name: Update Profile
+method: PUT
+url: '{{baseUrl}}/api/Profile'
+order: 3000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "title": "Senior Software Engineer",
+      "headline": "Building scalable, resilient web applications",
+      "subtitle": "Full-stack developer with a passion for clean, maintainable code"
+    }

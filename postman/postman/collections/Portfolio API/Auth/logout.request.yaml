@@ -1,0 +1,7 @@
+$kind: http-request
+name: Logout
+method: POST
+url: '{{baseUrl}}/api/Auth/logout'
+order: 3000
+auth:
+  type: noauth

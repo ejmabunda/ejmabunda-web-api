@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using ejmabunda_web_api.Models;
 using Microsoft.AspNetCore.Authorization;
 using ejmabunda_web_api.Services;
-using ejmabunda_web_api.Repositories;
 
 namespace ejmabunda_web_api.Controllers
 {
@@ -18,12 +17,10 @@ namespace ejmabunda_web_api.Controllers
     [Authorize]
     public class ProfileController : ControllerBase
     {
-        private readonly IProfileRepository _repository;
         private readonly IProfileService _service;
 
-        public ProfileController(IProfileRepository repository, IProfileService service)
+        public ProfileController(IProfileService service)
         {
-            _repository = repository;
             _service = service;
         }
 
@@ -32,9 +29,9 @@ namespace ejmabunda_web_api.Controllers
         /// <response code="404">No profile has been created yet.</response>
         [HttpGet]
         [AllowAnonymous]
-        public async Task<ActionResult<Profile>> GetProfile()
+        public async Task<ActionResult<Profile>> GetProfileAsync()
         {
-            var profile = await _repository.GetProfileAsync();
+            var profile = await _service.GetProfileAsync();
 
             if (profile == null) return NotFound();
             return Ok(profile);
@@ -46,7 +43,7 @@ namespace ejmabunda_web_api.Controllers
         // PUT: api/Profile
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut]
-        public async Task<IActionResult> PutProfileAsync([FromBody] ProfilePutDto profileDto)
+        public async Task<ActionResult<Profile>> PutProfileAsync([FromBody] ProfilePutDto profileDto)
         {
             Profile? profile;
             try
@@ -94,7 +91,7 @@ namespace ejmabunda_web_api.Controllers
 
         private async Task<bool> ProfileExists()
         {
-            return await _repository.GetProfileAsync() != null;
+            return await _service.GetProfileAsync() != null;
         }
     }
 }

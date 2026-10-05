@@ -1,0 +1,21 @@
+$kind: http-request
+name: Create Experience
+method: POST
+url: '{{baseUrl}}/api/Experience'
+order: 3000
+headers:
+  - key: Content-Type
+    value: application/json
+body:
+  type: json
+  content: |-
+    {
+      "jobTitle": "Software Engineer",
+      "employer": "Acme Corp",
+      "startDate": "2023-01-01T00:00:00Z",
+      "endDate": null,
+      "description": "Developed and maintained backend services using ASP.NET Core.",
+      "skillIds": [
+        "00000000-0000-0000-0000-000000000000"
+      ]
+    }

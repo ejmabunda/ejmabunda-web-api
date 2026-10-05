@@ -11,6 +11,9 @@ public interface IProfileService
     /// </summary>
     Task<Profile?> AddProfileAsync(ProfileAddDto profileDto);
 
+    /// <summary>Gets the profile. Returns <see langword="null"/> if no profile exists yet.</summary>
+    Task<Profile?> GetProfileAsync();
+
     /// <summary>
     /// Updates the profile, leaving fields omitted from <paramref name="profileDto"/>
     /// unchanged. Returns <see langword="null"/> if no profile exists yet.
