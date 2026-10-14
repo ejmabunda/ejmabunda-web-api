@@ -50,7 +50,6 @@ public class AuthController : ControllerBase
         if (verificationResult == PasswordVerificationResult.Failed)
             return Unauthorized();
 
-
         if (verificationResult == PasswordVerificationResult.SuccessRehashNeeded)
         {
             var rehashedPassword = _passwordHasher.HashPassword(user, request.Password);
