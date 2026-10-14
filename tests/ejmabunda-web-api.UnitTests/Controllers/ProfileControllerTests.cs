@@ -34,8 +34,7 @@ public class ProfileControllerTests
     public async Task GetProfile_ProfileExists_ReturnsOkWithProfile()
     {
         // Arrange
-        var response = new Profile()
-        { Id = 1, Title = "Title", Headline = "Headline", Subtitle = "Subtitle" };
+        var response = AnyProfile();
         _service.Setup(s => s.GetProfileAsync()).ReturnsAsync(response);
 
         // Act
@@ -44,27 +43,16 @@ public class ProfileControllerTests
         // Assert
         var okResult = Assert.IsType<OkObjectResult>(result.Result);
 
-        Assert.Equal(response, okResult.Value);
+        Assert.Same(response, okResult.Value);
     }
 
     [Fact]
     public async Task PostProfile_NoProfileExists_ReturnsCreatedAtGetProfile()
     {
         // Arrange
-        var request = new ProfileAddDto()
-        {
-            Title = "Title",
-            Headline = "Headline",
-            Subtitle = "Subtitle"
-        };
+        var request = AnyAddDto();
 
-        var response = new Profile()
-        {
-            Id = 1,
-            Title = request.Title,
-            Headline = request.Headline,
-            Subtitle = request.Subtitle
-        };
+        var response = AnyProfile();
 
         _service.Setup(s => s.AddProfileAsync(request))
             .ReturnsAsync(response);
@@ -83,12 +71,8 @@ public class ProfileControllerTests
     public async Task PostProfile_ProfileExists_ReturnsConflict()
     {
         // Arrange
-        var request = new ProfileAddDto()
-        {
-            Title = "Title",
-            Headline = "Headline",
-            Subtitle = "Subtitle"
-        };
+        var request = AnyAddDto();
+        
         _service.Setup(s => s.AddProfileAsync(request))
             .ReturnsAsync((Profile?)null);
 
@@ -96,7 +80,7 @@ public class ProfileControllerTests
         var result = await _controller.PostProfileAsync(request);
 
         // Assert
-        var conflictResult = Assert.IsType<ConflictObjectResult>(result.Result);
+        Assert.IsType<ConflictObjectResult>(result.Result);
     }
 
     [Fact]
@@ -104,8 +88,7 @@ public class ProfileControllerTests
     {
         // Arrange
         var request = new ProfilePutDto() { Title = "New Title" };
-        var response = new Profile()
-        { Id = 1, Title = "New Title", Headline = "Headline", Subtitle = "Subtitle" };
+        var response = AnyProfile();
 
         _service.Setup(s => s.UpdateProfileAsync(request))
             .ReturnsAsync(response);
@@ -138,8 +121,7 @@ public class ProfileControllerTests
     public async Task PutProfile_ConcurrencyConflictAndProfileStillExists_Rethrows()
     {
         // Arrange
-        var response = new Profile()
-        { Id = 1, Title = "Title", Headline = "Headline", Subtitle = "Subtitle" };
+        var response = AnyProfile();
         var request = new ProfilePutDto() { Title = "New Title" };
         _service.Setup(s => s.UpdateProfileAsync(request))
             .ThrowsAsync(new DbUpdateConcurrencyException());
@@ -169,4 +151,42 @@ public class ProfileControllerTests
         // Assert
         Assert.IsType<NotFoundResult>(result.Result);
     }
+
+    [Fact]
+    public async Task DeleteProfile_ProfileExists_ReturnsNoContent()
+    {
+        // Arrange
+        _service.Setup(s => s.DeleteProfileAsync())
+            .ReturnsAsync(AnyProfile());
+
+        // Act
+        var result = await _controller.DeleteProfileAsync();
+
+        // Assert
+        Assert.IsType<NoContentResult>(result);
+    }
+
+    [Fact]
+    public async Task DeleteProfile_NoProfileExists_ReturnsNotFound()
+    {
+        // Arrange
+        _service.Setup(s => s.DeleteProfileAsync())
+            .ReturnsAsync((Profile?)null);
+
+        // Act
+        var result = await _controller.DeleteProfileAsync();
+
+        // Assert
+        Assert.IsType<NotFoundResult>(result);
+    }
+
+    private static Profile AnyProfile() => new()
+    {
+        Title = "Title", Headline = "Headline", Subtitle = "Subtitle"
+    };
+
+    private static ProfileAddDto AnyAddDto() => new()
+    {
+        Title = "Title", Headline = "Headline", Subtitle = "Subtitle"
+    };
 }
