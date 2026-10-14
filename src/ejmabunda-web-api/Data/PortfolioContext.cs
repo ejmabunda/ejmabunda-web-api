@@ -43,8 +43,8 @@ public class PortfolioContext : DbContext
             new Profile()
             {
                 Title = "Matimu Mabunda",
-                Headline = "Software Developer",
-                Subtitle = "Software Developer with production experience architecting ASP.NET Core APIs, automated CI/CD pipelines, and cloud-native infrastructure on Azure. Proven ability to stabilize legacy systems, implement automated testing, and deliver full end-to-end enterprise features. Strong foundation in C#, SQL Server, and modern React/Next.js frontend architectures."
+                Headline = "Junior Software Developer, C# / .NET",
+                Subtitle = "Junior Software Developer building backend features in C#/.NET and SQL Server. Responsible for development and production support on a live enterprise recruitment platform built on a Dynamics 365-inspired CRM. Building a .NET 10 Web API on Azure as a personal project, with documented architecture decisions and secretless CI/CD."
             }
         );
 
@@ -70,24 +70,19 @@ public class PortfolioContext : DbContext
                 Employer = "WeThinkCode_",
                 StartDate = new DateTime(2025, 09, 01),
                 EndDate = new DateTime(2025, 12, 10),
-                Description = @"Mentored an incoming cohort of software engineering students alongside my own studies, supporting onboarding and technical growth.
-Led code pairing sessions and reviewed student submissions and commits, reinforcing software engineering best practices.
-Facilitated PechaKucha-style presentations to build mentees' communication and technical-storytelling skills.
-Partnered with the Student Performance team through standups and retrospectives to track mentee progress and escalate blockers."
+                Description = @"Mentored a cohort of software engineering students through technical onboarding, code-pairing sessions, and systematic commit reviews."
             }, new Experience
             {
                 Id = new Guid("00116dbb-6810-421c-a703-aecfe9872f77"),
                 JobTitle = "Junior Developer",
                 Employer = "Xiquel Group",
                 StartDate = new DateTime(2026, 02, 02),
-                EndDate = new DateTime(2027, 01, 31),
-                Description = @"Responsible for backend development and production support for an end-to-end recruitment platform, from vacancy creation through interviews, panel scoring, and offers, live in production.
-Built an automated interview-scheduling feature (C#/.NET, Ical.Net) that distributes scoring links and calendar invites to panel members automatically, eliminating manual coordination for every interview cycle.
-Refactored a legacy JavaScript codebase into a state-driven architecture and introduced its first automated test suite (Jest) — including full coverage of multi-tier approval logic — cutting regression risk on the platform's most business-critical workflow.
-Handle production support for a live, high-traffic system: diagnosed and resolved cross-stack issues including backend exceptions, async race conditions, and SQL correlated-subquery bugs. One fix resolved a document-classification defect that had been silently blocking candidates from submitting applications.
-Built backend API integrations connecting a candidate-facing portal to core CRM data.
-Wrote and optimized SQL Server queries across recruitment data for reporting and root-cause investigations used in production incident response.
-Designed cross-client HTML email templates (including Outlook/VML fallbacks) for automated candidate and panel communications."
+                EndDate = null, // current role
+                Description = @"Responsible for backend development and production support on a live enterprise recruitment platform built on a Dynamics 365-inspired CRM; resolve defects across C# plugins, JavaScript form logic, and SQL Server, including a document-classification defect that was silently blocking candidates from submitting applications.
+Built an interview-scheduling module (C#/.NET, Ical.Net) that sends scoring links and calendar invites for each recruitment cycle, replacing manual scheduling coordination.
+Built a .NET console application that imports National Treasury mSCOA data through the platform's execute-request API for a municipal finance system in development; the team uses it as the only method for loading this data.
+Configure Dynamics 365 model-driven apps, forms, views, business process flows, and dashboards for a client.
+Built API integrations connecting a candidate-facing portal to CRM data, and wrote SQL Server queries for reporting."
             }
         );
 
@@ -96,24 +91,29 @@ Designed cross-client HTML email templates (including Outlook/VML fallbacks) for
             // Languages & Backend
             new Skill { Id = new Guid("FF87C78A-3A06-4160-89E9-08DF07C4F846"), Name = "C#", SkillCategory = SkillCategory.LanguagesAndBackend },
             new Skill { Id = new Guid("F12BA2B4-E019-4CDF-89EA-08DF07C4F846"), Name = ".NET", SkillCategory = SkillCategory.LanguagesAndBackend },
-            new Skill { Id = new Guid("39DA40C1-F90F-497C-89EB-08DF07C4F846"), Name = "ASP.NET Web API", SkillCategory = SkillCategory.LanguagesAndBackend },
-            new Skill { Id = new Guid("5234D9F0-C4E1-4C88-89EC-08DF07C4F846"), Name = "REST", SkillCategory = SkillCategory.LanguagesAndBackend },
+            new Skill { Id = new Guid("39DA40C1-F90F-497C-89EB-08DF07C4F846"), Name = "ASP.NET Core Web API", SkillCategory = SkillCategory.LanguagesAndBackend },
+            new Skill { Id = new Guid("5234D9F0-C4E1-4C88-89EC-08DF07C4F846"), Name = "REST APIs", SkillCategory = SkillCategory.LanguagesAndBackend },
             new Skill { Id = new Guid("B60764E1-2F14-4CF5-89ED-08DF07C4F846"), Name = "JSON", SkillCategory = SkillCategory.LanguagesAndBackend },
             new Skill { Id = new Guid("DA81DC14-30C0-4A77-89EE-08DF07C4F846"), Name = "T-SQL", SkillCategory = SkillCategory.LanguagesAndBackend },
             new Skill { Id = new Guid("B3B43267-E5DD-4056-89EF-08DF07C4F846"), Name = "JavaScript (ES6+)", SkillCategory = SkillCategory.LanguagesAndBackend },
             new Skill { Id = new Guid("B87602AE-295B-4EBA-89F0-08DF07C4F846"), Name = "Python", SkillCategory = SkillCategory.LanguagesAndBackend },
+            new Skill { Id = new Guid("cec2f492-c370-4541-9779-655b7069aa0e"), Name = "EF Core", SkillCategory = SkillCategory.LanguagesAndBackend },
+            new Skill { Id = new Guid("6298e695-2d82-49d8-bb55-654025b48d40"), Name = "HTML/CSS", SkillCategory = SkillCategory.LanguagesAndBackend },
 
             // Systems & Data
             new Skill { Id = new Guid("7154A018-BD1D-4E0D-89F1-08DF07C4F846"), Name = "SQL Server", SkillCategory = SkillCategory.SystemsAndData },
             new Skill { Id = new Guid("79D1CDB5-2238-4CFA-89F2-08DF07C4F846"), Name = "Process Automation", SkillCategory = SkillCategory.SystemsAndData },
             new Skill { Id = new Guid("A34486D1-1E35-4E6B-89F3-08DF07C4F846"), Name = "Data Modelling", SkillCategory = SkillCategory.SystemsAndData },
             new Skill { Id = new Guid("CE5B9AAE-4136-4004-89F4-08DF07C4F846"), Name = "API Integrations", SkillCategory = SkillCategory.SystemsAndData },
+            new Skill { Id = new Guid("43a1ee71-98ca-4ac1-bd8b-86f31daf5751"), Name = "SSRS", SkillCategory = SkillCategory.SystemsAndData },
 
             // Platform
-            new Skill { Id = new Guid("78CE5D51-F878-43AA-89F5-08DF07C4F846"), Name = "Dynamics 365 / CRM", SkillCategory = SkillCategory.Platform },
-            new Skill { Id = new Guid("B8E3D00E-79AA-4C23-89F6-08DF07C4F846"), Name = "Plugins", SkillCategory = SkillCategory.Platform },
+            new Skill { Id = new Guid("78CE5D51-F878-43AA-89F5-08DF07C4F846"), Name = "Dynamics 365", SkillCategory = SkillCategory.Platform },
+            new Skill { Id = new Guid("B8E3D00E-79AA-4C23-89F6-08DF07C4F846"), Name = "Plugin development", SkillCategory = SkillCategory.Platform },
             new Skill { Id = new Guid("9D2F95FB-2E19-4A8B-89F7-08DF07C4F846"), Name = "Execute Requests", SkillCategory = SkillCategory.Platform },
             new Skill { Id = new Guid("42745C25-FDAE-41FC-89F8-08DF07C4F846"), Name = "Form scripting", SkillCategory = SkillCategory.Platform },
+            new Skill { Id = new Guid("56760ee4-453b-41f8-b13b-f86f6ce0138e"), Name = "Model-driven apps", SkillCategory = SkillCategory.Platform },
+            new Skill { Id = new Guid("5859072a-ce48-4517-92a3-037a006e059c"), Name = "Business process flows", SkillCategory = SkillCategory.Platform },
 
             // Testing & Reliability
             new Skill { Id = new Guid("1BE17DBE-55A5-4E3B-89F9-08DF07C4F846"), Name = "Jest", SkillCategory = SkillCategory.TestingAndReliability },
@@ -127,7 +127,9 @@ Designed cross-client HTML email templates (including Outlook/VML fallbacks) for
             new Skill { Id = new Guid("2571F576-4632-40EF-89FF-08DF07C4F846"), Name = "CI/CD pipelines", SkillCategory = SkillCategory.CloudAndDevOps },
             new Skill { Id = new Guid("797D239C-F2DB-49A8-8A00-08DF07C4F846"), Name = "Docker", SkillCategory = SkillCategory.CloudAndDevOps },
             new Skill { Id = new Guid("EA5743A7-0DF7-4956-8A01-08DF07C4F846"), Name = "Git", SkillCategory = SkillCategory.CloudAndDevOps },
-            new Skill { Id = new Guid("9353A742-5EBC-44BB-8A02-08DF07C4F846"), Name = "GitHub", SkillCategory = SkillCategory.CloudAndDevOps }
+            new Skill { Id = new Guid("9353A742-5EBC-44BB-8A02-08DF07C4F846"), Name = "GitHub Actions (OIDC)", SkillCategory = SkillCategory.CloudAndDevOps },
+            new Skill { Id = new Guid("9670c65e-a27e-459a-854d-19a3a950fb28"), Name = "Azure App Service", SkillCategory = SkillCategory.CloudAndDevOps },
+            new Skill { Id = new Guid("355fe170-bea5-4614-8bc7-612a4711b345"), Name = "Azure SQL Database", SkillCategory = SkillCategory.CloudAndDevOps }
         );
 
         // seed experience skills
@@ -196,7 +198,7 @@ Designed cross-client HTML email templates (including Outlook/VML fallbacks) for
             new ExperienceSkill
             {
                 ExperienceId = new Guid("00116dbb-6810-421c-a703-aecfe9872f77"),
-                SkillId = new Guid("78CE5D51-F878-43AA-89F5-08DF07C4F846")   // Dynamics 365 / CRM
+                SkillId = new Guid("78CE5D51-F878-43AA-89F5-08DF07C4F846")   // Dynamics 365
             },
             new ExperienceSkill
             {
@@ -207,6 +209,31 @@ Designed cross-client HTML email templates (including Outlook/VML fallbacks) for
             {
                 ExperienceId = new Guid("00116dbb-6810-421c-a703-aecfe9872f77"),
                 SkillId = new Guid("BCE7603B-066C-4E06-89FC-08DF07C4F846")   // Root-cause analysis
+            },
+            new ExperienceSkill
+            {
+                ExperienceId = new Guid("00116dbb-6810-421c-a703-aecfe9872f77"),
+                SkillId = new Guid("B8E3D00E-79AA-4C23-89F6-08DF07C4F846")   // Plugin development
+            },
+            new ExperienceSkill
+            {
+                ExperienceId = new Guid("00116dbb-6810-421c-a703-aecfe9872f77"),
+                SkillId = new Guid("9D2F95FB-2E19-4A8B-89F7-08DF07C4F846")   // Execute Requests
+            },
+            new ExperienceSkill
+            {
+                ExperienceId = new Guid("00116dbb-6810-421c-a703-aecfe9872f77"),
+                SkillId = new Guid("42745C25-FDAE-41FC-89F8-08DF07C4F846")   // Form scripting
+            },
+            new ExperienceSkill
+            {
+                ExperienceId = new Guid("00116dbb-6810-421c-a703-aecfe9872f77"),
+                SkillId = new Guid("56760ee4-453b-41f8-b13b-f86f6ce0138e")   // Model-driven apps
+            },
+            new ExperienceSkill
+            {
+                ExperienceId = new Guid("00116dbb-6810-421c-a703-aecfe9872f77"),
+                SkillId = new Guid("5859072a-ce48-4517-92a3-037a006e059c")   // Business process flows
             }
         );
 
@@ -224,15 +251,24 @@ Designed cross-client HTML email templates (including Outlook/VML fallbacks) for
             new Qualification
             {
                 Id = new Guid("a774c9bc-61f5-4309-a53a-4da9d11494ec"),
-                Name = "Occupational Certificate: Software Engineer",
+                Name = "Occupational Certificate: Software Engineering",
                 Institution = "WeThinkCode_",
                 StartDate = new DateTime(2024, 01, 01),
-                EndDate = new DateTime(2025, 01, 01),
+                EndDate = new DateTime(2026, 01, 01),
                 NqfLevel = NqfLevel.Diploma
+            },
+            new Qualification
+            {
+                Id = new Guid("ed318d65-52c0-47a2-a559-924c2563b482"),
+                Name = "BSc Computer Science (not completed)",
+                Institution = "Rhodes University",
+                StartDate = new DateTime(2018, 01, 01),
+                EndDate = new DateTime(2021, 12, 01),
+                NqfLevel = NqfLevel.BachelorsDegree
             }
         );
 
-        // seed qualification skills (the National Senior Certificate has none)
+        // seed qualification skills (the National Senior Certificate and Rhodes coursework have none)
         modelBuilder.Entity<QualificationSkill>()
             .HasKey(qs => new { qs.QualificationId, qs.SkillId });
 
@@ -277,6 +313,87 @@ Designed cross-client HTML email templates (including Outlook/VML fallbacks) for
             {
                 QualificationId = new Guid("a774c9bc-61f5-4309-a53a-4da9d11494ec"),
                 SkillId = new Guid("9f1ac98a-d659-4bb5-afe8-b5b859516f59")   // AWS (CloudFormation, ECS, Fargate)
+            }
+        );
+
+        // seed projects
+        modelBuilder.Entity<Project>().HasData(
+            new Project
+            {
+                Id = new Guid("738d83e0-3dc5-4e48-a31d-129efcfd17d9"),
+                Name = "Portfolio Web API",
+                Url = "https://github.com/ejmabunda/ejmabunda-web-api"
+            }
+        );
+
+        // seed project skills
+        modelBuilder.Entity<ProjectSkill>().HasData(
+            // portfolio web api
+            new ProjectSkill
+            {
+                Id = new Guid("faaba0a6-801f-42ae-a738-85e8f009e031"),
+                ProjectId = new Guid("738d83e0-3dc5-4e48-a31d-129efcfd17d9"),
+                SkillId = new Guid("FF87C78A-3A06-4160-89E9-08DF07C4F846")   // C#
+            },
+            new ProjectSkill
+            {
+                Id = new Guid("7d2fdd91-663c-44dd-8a7b-b9bde58e4df6"),
+                ProjectId = new Guid("738d83e0-3dc5-4e48-a31d-129efcfd17d9"),
+                SkillId = new Guid("F12BA2B4-E019-4CDF-89EA-08DF07C4F846")   // .NET
+            },
+            new ProjectSkill
+            {
+                Id = new Guid("84f42022-65e8-42c3-aa53-da0306ca8d69"),
+                ProjectId = new Guid("738d83e0-3dc5-4e48-a31d-129efcfd17d9"),
+                SkillId = new Guid("39DA40C1-F90F-497C-89EB-08DF07C4F846")   // ASP.NET Core Web API
+            },
+            new ProjectSkill
+            {
+                Id = new Guid("adf3911a-6c93-4f13-aaa2-78a760e81fa3"),
+                ProjectId = new Guid("738d83e0-3dc5-4e48-a31d-129efcfd17d9"),
+                SkillId = new Guid("5234D9F0-C4E1-4C88-89EC-08DF07C4F846")   // REST APIs
+            },
+            new ProjectSkill
+            {
+                Id = new Guid("73506565-b94b-4b85-8d8e-f15636202f0b"),
+                ProjectId = new Guid("738d83e0-3dc5-4e48-a31d-129efcfd17d9"),
+                SkillId = new Guid("cec2f492-c370-4541-9779-655b7069aa0e")   // EF Core
+            },
+            new ProjectSkill
+            {
+                Id = new Guid("38bd0bca-ab67-4afb-b312-fffbbdb138e3"),
+                ProjectId = new Guid("738d83e0-3dc5-4e48-a31d-129efcfd17d9"),
+                SkillId = new Guid("7154A018-BD1D-4E0D-89F1-08DF07C4F846")   // SQL Server
+            },
+            new ProjectSkill
+            {
+                Id = new Guid("db1b6b44-36d9-463e-bb25-5276add896ca"),
+                ProjectId = new Guid("738d83e0-3dc5-4e48-a31d-129efcfd17d9"),
+                SkillId = new Guid("A34486D1-1E35-4E6B-89F3-08DF07C4F846")   // Data Modelling
+            },
+            new ProjectSkill
+            {
+                Id = new Guid("32a31553-5a09-4615-a604-500d02afa236"),
+                ProjectId = new Guid("738d83e0-3dc5-4e48-a31d-129efcfd17d9"),
+                SkillId = new Guid("9670c65e-a27e-459a-854d-19a3a950fb28")   // Azure App Service
+            },
+            new ProjectSkill
+            {
+                Id = new Guid("78c4154f-22cf-4d70-9ec4-1ca9697294fd"),
+                ProjectId = new Guid("738d83e0-3dc5-4e48-a31d-129efcfd17d9"),
+                SkillId = new Guid("355fe170-bea5-4614-8bc7-612a4711b345")   // Azure SQL Database
+            },
+            new ProjectSkill
+            {
+                Id = new Guid("19b143e0-adac-46eb-a09f-e68bfa3d1632"),
+                ProjectId = new Guid("738d83e0-3dc5-4e48-a31d-129efcfd17d9"),
+                SkillId = new Guid("9353A742-5EBC-44BB-8A02-08DF07C4F846")   // GitHub Actions (OIDC)
+            },
+            new ProjectSkill
+            {
+                Id = new Guid("915ca3bb-5451-4edc-a9e6-fe3ec0d2f652"),
+                ProjectId = new Guid("738d83e0-3dc5-4e48-a31d-129efcfd17d9"),
+                SkillId = new Guid("2571F576-4632-40EF-89FF-08DF07C4F846")   // CI/CD pipelines
             }
         );
     }
