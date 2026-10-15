@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ejmabunda_web_api.Migrations
 {
     /// <inheritdoc />
-    public partial class UpdateSeeds : Migration
+    public partial class UpdateSeed : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -28,7 +28,7 @@ namespace ejmabunda_web_api.Migrations
                 keyColumn: "Id",
                 keyValue: new Guid("00116dbb-6810-421c-a703-aecfe9872f77"),
                 columns: new[] { "Description", "EndDate" },
-                values: new object[] { "Responsible for backend development and production support on a live enterprise recruitment platform built on a Dynamics 365-inspired CRM; resolve defects across C# plugins, JavaScript form logic, and SQL Server, including a document-classification defect that was silently blocking candidates from submitting applications.\r\nBuilt an interview-scheduling module (C#/.NET, Ical.Net) that sends scoring links and calendar invites for each recruitment cycle, replacing manual scheduling coordination.\r\nBuilt a .NET console application that imports National Treasury mSCOA data through the platform's execute-request API for a municipal finance system in development; the team uses it as the only method for loading this data.\r\nConfigure Dynamics 365 model-driven apps, forms, views, business process flows, and dashboards for a client.\r\nBuilt API integrations connecting a candidate-facing portal to CRM data, and wrote SQL Server queries for reporting.", null });
+                values: new object[] { "Responsible for backend development and production support on a live enterprise recruitment platform built on a Dynamics 365-inspired CRM; resolve defects across C# plugins, JavaScript form logic, and SQL Server, including a document-classification defect that was silently blocking candidates from submitting applications.\nBuilt an interview-scheduling module (C#/.NET, Ical.Net) that sends scoring links and calendar invites for each recruitment cycle, replacing manual scheduling coordination.\nBuilt a .NET console application that imports National Treasury mSCOA data through the platform's execute-request API for a municipal finance system in development; the team uses it as the only method for loading this data.\nConfigure Dynamics 365 model-driven apps, forms, views, business process flows, and dashboards for a client.\nBuilt API integrations connecting a candidate-facing portal to CRM data, and wrote SQL Server queries for reporting.", null });
 
             migrationBuilder.UpdateData(
                 table: "Experiences",
@@ -42,7 +42,7 @@ namespace ejmabunda_web_api.Migrations
                 keyColumn: "Id",
                 keyValue: 1,
                 columns: new[] { "Headline", "Subtitle" },
-                values: new object[] { "Junior Software Developer, C# / .NET", "Junior Software Developer building backend features in C#/.NET and SQL Server. Responsible for development and production support on a live enterprise recruitment platform built on a Dynamics 365-inspired CRM. Building a .NET 10 Web API on Azure as a personal project, with documented architecture decisions and secretless CI/CD. Looking for a junior backend role in a team with strong engineering practices." });
+                values: new object[] { "Junior Software Developer, C# / .NET", "Junior Software Developer building backend features in C#/.NET and SQL Server. Responsible for development and production support on a live enterprise recruitment platform built on a Dynamics 365-inspired CRM. Building a .NET 10 Web API on Azure as a personal project, with documented architecture decisions and secretless CI/CD." });
 
             migrationBuilder.InsertData(
                 table: "Projects",
@@ -54,12 +54,12 @@ namespace ejmabunda_web_api.Migrations
                 keyColumn: "Id",
                 keyValue: new Guid("a774c9bc-61f5-4309-a53a-4da9d11494ec"),
                 columns: new[] { "EndDate", "Name" },
-                values: new object[] { new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Occupational Certificate: Software Engineering (with distinction)" });
+                values: new object[] { new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Occupational Certificate: Software Engineering" });
 
             migrationBuilder.InsertData(
                 table: "Qualifications",
                 columns: new[] { "Id", "EndDate", "Institution", "Name", "NqfLevel", "StartDate" },
-                values: new object[] { new Guid("ed318d65-52c0-47a2-a559-924c2563b482"), new DateTime(2021, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Rhodes University", "BSc Computer Science (coursework, not completed)", 7, new DateTime(2018, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) });
+                values: new object[] { new Guid("ed318d65-52c0-47a2-a559-924c2563b482"), new DateTime(2021, 12, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Rhodes University", "BSc Computer Science (not completed)", 7, new DateTime(2018, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified) });
 
             migrationBuilder.UpdateData(
                 table: "Skills",
