@@ -2,8 +2,6 @@ using ejmabunda_web_api.Models;
 using ejmabunda_web_api.Repositories;
 using ejmabunda_web_api.Services;
 using Moq;
-using Xunit;
-using Xunit.Sdk;
 
 namespace ejmabunda_web_api.UnitTests.Services;
 
@@ -18,7 +16,7 @@ public class ProfileServiceTests
     }
 
     [Fact]
-    public async Task AddProfile_ReposotoryReturnsProfile_ReturnsProfile()
+    public async Task AddProfile_RepositoryReturnsProfile_ReturnsProfile()
     {
         // Arrange
         var anyProfileAddDto = AnyProfileAddDto();
@@ -31,8 +29,7 @@ public class ProfileServiceTests
         var result = await _service.AddProfileAsync(anyProfileAddDto);
 
         // Assert
-        Assert.Same(result, anyProfile);
-
+        Assert.Same(anyProfile, result);
     }
 
     [Fact]
@@ -62,7 +59,7 @@ public class ProfileServiceTests
         var result = await _service.GetProfileAsync();
 
         // Assert
-        Assert.Same(result, anyProfile);
+        Assert.Same(anyProfile, result);
     }
 
     [Fact]
@@ -80,7 +77,7 @@ public class ProfileServiceTests
     }
 
     [Fact]
-    public async Task UpdateProfile_RepositoryReturnsUpdatedProfile_ReturnsUpdatedProfile()
+    public async Task UpdateProfile_ProfileExists_ReturnsUpdatedProfile()
     {
         // Arrange
         var profilePutDto = UpdatedProfilePutDto();
@@ -95,12 +92,11 @@ public class ProfileServiceTests
         var result = await _service.UpdateProfileAsync(profilePutDto);
 
         // Assert
-        Assert.NotNull(result);
-        Assert.Equivalent(profile, result);
+        Assert.Same(profile, result);
     }
 
     [Fact]
-    public async Task UpdateProfile_RepositoryReturnsNull_ReturnsNull()
+    public async Task UpdateProfile_NoProfileExists_ReturnsNull()
     {
         // Arrange
         var profilePutDto = UpdatedProfilePutDto();
@@ -117,6 +113,40 @@ public class ProfileServiceTests
             Times.Never);
     }
 
+    [Fact]
+    public async Task DeleteProfile_ProfileExists_ReturnsDeletedProfile()
+    {
+        // Arrange
+        var anyProfile = AnyProfile();
+        _repository.Setup(r => r.GetProfileAsync())
+            .ReturnsAsync(anyProfile);
+        _repository.Setup(r => r.DeleteProfileAsync(anyProfile))
+            .ReturnsAsync(anyProfile);
+
+        // Act
+        var result = await _service.DeleteProfileAsync();
+
+        // Assert
+        Assert.Same(anyProfile, result);
+    }
+
+    [Fact]
+    public async Task DeleteProfile_NoProfileExists_ReturnsNull()
+    {
+        // Arrange
+        _repository.Setup(r => r.GetProfileAsync())
+            .ReturnsAsync((Profile?)null);
+
+        // Act
+        var result = await _service.DeleteProfileAsync();
+
+        // Assert
+        Assert.Null(result);
+        _repository.Verify(
+            r => r.DeleteProfileAsync(It.IsAny<Profile>()),
+            Times.Never);
+    }
+
     private static ProfileAddDto AnyProfileAddDto() => new()
     {
         Title = "Title", Headline = "Headline", Subtitle = "Subtitle"
@@ -130,11 +160,6 @@ public class ProfileServiceTests
     private static Profile UpdatedProfile() => new()
     {
         Title = "New Title", Headline = "New Headline", Subtitle = "New Subtitle"
-    };
-
-    private static ProfilePutDto AnyProfilePutDto() => new()
-    {
-        Title = "Title", Headline = "Headline", Subtitle = "Subtitle"
     };
 
     private static ProfilePutDto UpdatedProfilePutDto() => new()
