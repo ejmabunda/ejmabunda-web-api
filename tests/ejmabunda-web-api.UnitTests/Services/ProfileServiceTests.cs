@@ -3,6 +3,7 @@ using ejmabunda_web_api.Repositories;
 using ejmabunda_web_api.Services;
 using Moq;
 using Xunit;
+using Xunit.Sdk;
 
 namespace ejmabunda_web_api.UnitTests.Services;
 
@@ -17,7 +18,7 @@ public class ProfileServiceTests
     }
 
     [Fact]
-    public async Task AddProfileAsync_NoProfileExists_ReturnsProfile()
+    public async Task AddProfile_ReposotoryReturnsProfile_ReturnsProfile()
     {
         // Arrange
         var anyProfileAddDto = AnyProfileAddDto();
@@ -30,15 +31,15 @@ public class ProfileServiceTests
         var result = await _service.AddProfileAsync(anyProfileAddDto);
 
         // Assert
-        Assert.IsType<Profile>(result);
+        Assert.Same(result, anyProfile);
+
     }
 
     [Fact]
-    public async Task AddProfileAsync_ProfileExists_ReturnsNull()
+    public async Task AddProfile_RepositoryReturnsNull_ReturnsNull()
     {
         // Arrange
         var anyProfileAddDto = AnyProfileAddDto();
-        var anyProfile = AnyProfile();
         _repository.Setup(r => r.AddProfileAsync(anyProfileAddDto))
             .ReturnsAsync((Profile?)null);
 
@@ -50,7 +51,7 @@ public class ProfileServiceTests
     }
 
     [Fact]
-    public async Task GetProfile_ProfileExists_ReturnsProfile()
+    public async Task GetProfile_RepositoryReturnsProfile_ReturnsProfile()
     {
         // Arrange
         var anyProfile = AnyProfile();
@@ -61,14 +62,13 @@ public class ProfileServiceTests
         var result = await _service.GetProfileAsync();
 
         // Assert
-        Assert.IsType<Profile>(result);
+        Assert.Same(result, anyProfile);
     }
 
     [Fact]
-    public async Task GetProfile_NoProfileExists_ReturnsNull()
+    public async Task GetProfile_RepositoryReturnsNull_ReturnsNull()
     {
         // Arrange
-        var anyProfile = AnyProfile();
         _repository.Setup(r => r.GetProfileAsync())
             .ReturnsAsync((Profile?)null);
 
@@ -80,12 +80,12 @@ public class ProfileServiceTests
     }
 
     [Fact]
-    public async Task UpdateProfile_ProfileExists_ReturnsUpdatedProfile()
+    public async Task UpdateProfile_RepositoryReturnsUpdatedProfile_ReturnsUpdatedProfile()
     {
         // Arrange
-        var profilePutDto = ProfilePutDto();
+        var profilePutDto = UpdatedProfilePutDto();
         var anyProfile = AnyProfile();
-        var profile = Profile();
+        var profile = UpdatedProfile();
         _repository.Setup(r => r.GetProfileAsync())
             .ReturnsAsync(anyProfile);
         _repository.Setup(r => r.UpdateProfileAsync(anyProfile, profilePutDto))
@@ -96,7 +96,25 @@ public class ProfileServiceTests
 
         // Assert
         Assert.NotNull(result);
-        // Assert.Same(result, profile);
+        Assert.Equivalent(profile, result);
+    }
+
+    [Fact]
+    public async Task UpdateProfile_RepositoryReturnsNull_ReturnsNull()
+    {
+        // Arrange
+        var profilePutDto = UpdatedProfilePutDto();
+        _repository.Setup(r => r.GetProfileAsync())
+            .ReturnsAsync((Profile?)null);
+
+        // Act
+        var result = await _service.UpdateProfileAsync(profilePutDto);
+
+        // Assert
+        Assert.Null(result);
+        _repository.Verify(
+            r => r.UpdateProfileAsync(It.IsAny<Profile>(), It.IsAny<ProfilePutDto>()),
+            Times.Never);
     }
 
     private static ProfileAddDto AnyProfileAddDto() => new()
@@ -109,7 +127,7 @@ public class ProfileServiceTests
         Id = 1, Title = "Title", Headline = "Headline", Subtitle = "Subtitle"
     };
 
-    private static Profile Profile() => new()
+    private static Profile UpdatedProfile() => new()
     {
         Title = "New Title", Headline = "New Headline", Subtitle = "New Subtitle"
     };
@@ -119,7 +137,7 @@ public class ProfileServiceTests
         Title = "Title", Headline = "Headline", Subtitle = "Subtitle"
     };
 
-    private static ProfilePutDto ProfilePutDto() => new()
+    private static ProfilePutDto UpdatedProfilePutDto() => new()
     {
         Title = "New Title", Headline = "New Headline", Subtitle = "New Subtitle"
     };
