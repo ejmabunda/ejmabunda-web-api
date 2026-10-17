@@ -3,6 +3,7 @@
     <Project Path="src/ejmabunda-web-api/ejmabunda-web-api.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/ejmabunda-web-api.IntegrationTests/ejmabunda-web-api.IntegrationTests.csproj" />
     <Project Path="tests/ejmabunda-web-api.UnitTests/ejmabunda-web-api.UnitTests.csproj" />
   </Folder>
 </Solution>
