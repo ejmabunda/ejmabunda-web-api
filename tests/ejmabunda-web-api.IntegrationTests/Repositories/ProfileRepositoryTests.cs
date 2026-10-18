@@ -31,12 +31,7 @@ public class ProfileRepositoryTests(SqlServerFixture db) : IAsyncLifetime
     public async Task GetProfile_WhenExists_ReturnsProfile()
     {
         // Arrange
-        await using (var arrange = db.CreateContext())
-        {
-            arrange.Profiles.Add(AnyProfile());
-            await arrange.SaveChangesAsync();
-        }
-
+        await SeedProfile();
         await using var act = db.CreateContext();
         var repository =
             new ProfileRepository(act, NullLogger<ProfileRepository>.Instance);
@@ -52,12 +47,7 @@ public class ProfileRepositoryTests(SqlServerFixture db) : IAsyncLifetime
     public async Task AddProfile_WhenExists_ReturnsNull()
     {
         // Arrange
-        await using (var arrange = db.CreateContext())
-        {
-            await arrange.Profiles.AddAsync(AnyProfile());
-            await arrange.SaveChangesAsync();
-        }
-
+        await SeedProfile();
         await using var act = db.CreateContext();
         var repository =
             new ProfileRepository(act, NullLogger<ProfileRepository>.Instance);
@@ -94,6 +84,75 @@ public class ProfileRepositoryTests(SqlServerFixture db) : IAsyncLifetime
         Assert.Equivalent(AnyProfile(), stored);
     }
 
+    [Fact]
+    public async Task UpdateProfile_ProfileExists_FullUpdatePersistsAndReturnsProfile()
+    {
+        // Arrange
+        await SeedProfile();
+
+        await using var act = db.CreateContext();
+        var repository
+            = new ProfileRepository(act, NullLogger<ProfileRepository>.Instance);
+        var anyProfile = await act.Profiles.FirstOrDefaultAsync();
+        Assert.NotNull(anyProfile);
+
+        // Act
+        var newProfilePutDto = NewProfilePutDto();
+        var result = await repository.UpdateProfileAsync(anyProfile!, newProfilePutDto);
+
+        // Assert
+        var newProfile = NewProfile();
+        await using var assert = db.CreateContext();
+        var stored = Assert.Single(await assert.Profiles.ToListAsync());
+        Assert.Equivalent(newProfile, stored);
+        Assert.Equivalent(newProfile, result);
+    }
+
+    [Fact]
+    public async Task UpdateProfile_ProfileExists_PartialUpdatePersistsAndReturnsProfile()
+    {
+        // Arrange
+        await SeedProfile();
+        await using var act = db.CreateContext();
+        var repository =
+            new ProfileRepository(act, NullLogger<ProfileRepository>.Instance);
+
+        var anyProfile = await act.Profiles.FirstOrDefaultAsync();
+        Assert.NotNull(anyProfile);
+
+        // Act
+        var partialProfilePutDto = PartialProfilePutDto();
+        var result = await repository.UpdateProfileAsync(anyProfile!, partialProfilePutDto);
+
+        // Assert
+        var partialProfile = PartialProfile();
+        await using var assert = db.CreateContext();
+        var stored = Assert.Single(await assert.Profiles.ToListAsync());
+        Assert.Equivalent(partialProfile, stored);
+        Assert.Equivalent(partialProfile, result);
+    }
+
+    [Fact]
+    public async Task DeleteProfile_ProfileExists_RemovesFromDbAndReturnsProfile()
+    {
+        // Arrange
+        await SeedProfile();
+        await using var act = db.CreateContext();
+        var repository =
+            new ProfileRepository(act, NullLogger<ProfileRepository>.Instance);
+        var profile = await act.Profiles.FirstOrDefaultAsync();
+        Assert.NotNull(profile);
+
+        // Act
+        var result = await repository.DeleteProfileAsync(profile);
+
+        // Assert
+        Assert.Same(profile, result);
+        await using var assert = db.CreateContext();
+        Assert.Empty(await assert.Profiles.ToListAsync());
+    }
+
+    // helpers
     private static Profile AnyProfile() => new()
     {
         Title = "Title",
@@ -107,4 +166,39 @@ public class ProfileRepositoryTests(SqlServerFixture db) : IAsyncLifetime
         Headline = "Headline",
         Subtitle = "Subtitle"
     };
+
+    private static Profile NewProfile() => new()
+    {
+        Title = "New Title",
+        Subtitle = "New Subtitle",
+        Headline = "New Headline"
+    };
+
+    private static ProfilePutDto NewProfilePutDto() => new()
+    {
+        Title = "New Title",
+        Subtitle = "New Subtitle",
+        Headline = "New Headline"
+    };
+
+    private static ProfilePutDto PartialProfilePutDto() => new()
+    {
+        Title = "Partial Title"
+    };
+
+    private static Profile PartialProfile() => new()
+    {
+        Title = "Partial Title",
+        Headline = "Headline",
+        Subtitle = "Subtitle"
+    };
+
+    private async Task SeedProfileAsync()
+    {
+        await using (var arrange = db.CreateContext())
+        {
+            await arrange.Profiles.AddAsync(AnyProfile());
+            await arrange.SaveChangesAsync();
+        }
+    }
 }
