@@ -31,7 +31,7 @@ public class ProfileRepositoryTests(SqlServerFixture db) : IAsyncLifetime
     public async Task GetProfile_WhenExists_ReturnsProfile()
     {
         // Arrange
-        await SeedProfile();
+        await SeedProfileAsync();
         await using var act = db.CreateContext();
         var repository =
             new ProfileRepository(act, NullLogger<ProfileRepository>.Instance);
@@ -47,7 +47,7 @@ public class ProfileRepositoryTests(SqlServerFixture db) : IAsyncLifetime
     public async Task AddProfile_WhenExists_ReturnsNull()
     {
         // Arrange
-        await SeedProfile();
+        await SeedProfileAsync();
         await using var act = db.CreateContext();
         var repository =
             new ProfileRepository(act, NullLogger<ProfileRepository>.Instance);
@@ -88,7 +88,7 @@ public class ProfileRepositoryTests(SqlServerFixture db) : IAsyncLifetime
     public async Task UpdateProfile_ProfileExists_FullUpdatePersistsAndReturnsProfile()
     {
         // Arrange
-        await SeedProfile();
+        await SeedProfileAsync();
 
         await using var act = db.CreateContext();
         var repository
@@ -112,7 +112,7 @@ public class ProfileRepositoryTests(SqlServerFixture db) : IAsyncLifetime
     public async Task UpdateProfile_ProfileExists_PartialUpdatePersistsAndReturnsProfile()
     {
         // Arrange
-        await SeedProfile();
+        await SeedProfileAsync();
         await using var act = db.CreateContext();
         var repository =
             new ProfileRepository(act, NullLogger<ProfileRepository>.Instance);
@@ -136,7 +136,7 @@ public class ProfileRepositoryTests(SqlServerFixture db) : IAsyncLifetime
     public async Task DeleteProfile_ProfileExists_RemovesFromDbAndReturnsProfile()
     {
         // Arrange
-        await SeedProfile();
+        await SeedProfileAsync();
         await using var act = db.CreateContext();
         var repository =
             new ProfileRepository(act, NullLogger<ProfileRepository>.Instance);
