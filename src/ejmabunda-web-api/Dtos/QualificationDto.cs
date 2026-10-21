@@ -29,14 +29,20 @@ public class QualificationAddDto
     public required List<Guid> SkillIds { get; set; }
 }
 
-/// <summary>Request body for updating a <see cref="Qualification"/>. Null scalar fields are left unchanged.</summary>
+/// <summary>
+/// Request body for updating a <see cref="Qualification"/>. Null scalar fields are left
+/// unchanged, except <see cref="EndDate"/>.
+/// </summary>
 public class QualificationUpdateDto
 {
     public string? Name { get; set; }
     public string? Institution { get; set; }
     public DateTime? StartDate { get; set; }
 
-    /// <summary>Null while the qualification is still in progress.</summary>
+    /// <summary>
+    /// Always applied: null (or omitted) clears the end date, marking the qualification as
+    /// in progress. Send the existing value to keep it.
+    /// </summary>
     public DateTime? EndDate { get; set; }
     public NqfLevel? NqfLevel { get; set; }
 

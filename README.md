@@ -16,6 +16,7 @@ The admin CRUD flows (`POST`/`PUT`/`DELETE` on Profile, Skill, Experience) are J
 - Entity Framework Core (SQL Server)
 - JWT bearer authentication (RSA-signed) with database-backed refresh tokens, issued via `/api/Auth`
 - NSwag / OpenAPI (Swagger UI in development)
+- xUnit + Moq (unit tests), Testcontainers + Respawn (integration tests against a real SQL Server)
 - GitHub Actions → Azure App Service (OIDC, no stored secrets)
 - Azure Logic App (scheduled keep-alive ping for the free-tier App Service)
 
@@ -41,8 +42,8 @@ flowchart TB
 
     subgraph backend["Backend (Azure)"]
         appservice["App Service Web App<br/>F1 tier, JWT bearer auth, secure by default"]
-        sql[("Azure SQL Server<br/>serverless, AAD + SQL auth")]
-        logicapp["Logic App<br/>Recurrence trigger, every 15 min"]
+        sql[("Azure SQL Database<br/>Basic (DTU) tier, AAD + SQL auth")]
+        logicapp["Logic App<br/>Recurrence trigger, every 20 min"]
         appservice <--> sql
         logicapp -->|"keep-alive ping (GET /api/Skill)"| appservice
     end
@@ -54,7 +55,7 @@ flowchart TB
     end
 
     subgraph cicd["CI/CD — GitHub Actions"]
-        backend_wf["Backend workflow (OIDC)"]
+        backend_wf["Backend workflow (build, test, deploy via OIDC)"]
         frontend_wf["Frontend workflow"]
     end
 
@@ -68,23 +69,36 @@ flowchart TB
 
 The frontend calls the API directly from the browser (CORS-restricted to `ApiSettings:FrontendUrl`, see [Configuration](#configuration)). Migrations are applied manually against Azure SQL; there's no migration step in [`deploy.yaml`](.github/workflows/deploy.yaml).
 
-The app runs on the App Service **F1 (free) tier**, which has no Always On, so an idle instance cold-starts (~30–60s). A separate Azure **Logic App** pings a public endpoint every 15 minutes to keep the instance warm — see [ADR-007](docs/decisions/ADR-007.md) and [ADR-008](docs/decisions/ADR-008.md), with the workflow definition in [`infrastructure/`](infrastructure/).
+The app runs on the App Service **F1 (free) tier**, which has no Always On, so an idle instance cold-starts (~30–60s). A separate Azure **Logic App** pings a public endpoint every 20 minutes to keep the instance warm — see [ADR-007](docs/decisions/ADR-007.md) and [ADR-008](docs/decisions/ADR-008.md), with the workflow definition in [`infrastructure/`](infrastructure/). Keeping the API warm also keeps the database busy, which is why the database runs on a fixed-price DTU tier rather than serverless — see [ADR-009](docs/decisions/ADR-009.md).
 
 ## Getting started
 
-**Prerequisites:** .NET 10 SDK, a reachable SQL Server instance (LocalDB/Express work fine for local dev).
+**Prerequisites:** .NET 10 SDK, a reachable SQL Server instance (LocalDB/Express work fine for local dev), and the `dotnet-ef` tool for migrations. Docker is needed only to run the integration tests.
 
 ```bash
-dotnet restore
+dotnet restore ejmabunda-web-api.slnx
 
-# Point ConnectionStrings:DefaultConnection (appsettings.json or user-secrets) at your SQL Server instance,
-# set ApiSettings:RefreshTokenHashKey (see Configuration), then apply migrations:
-dotnet ef database update
+# Point ConnectionStrings:DefaultConnection (appsettings.Development.json or user-secrets) at your
+# SQL Server instance, set ApiSettings:RefreshTokenHashKey (see Configuration), then apply migrations:
+dotnet ef database update --project src/ejmabunda-web-api
 
-dotnet run
+dotnet run --project src/ejmabunda-web-api
 ```
 
-In development the OpenAPI document is served at `/openapi/v1.json`, with Swagger UI for exploring the API.
+The `http` launch profile listens on `http://localhost:5014` (`https` adds `https://localhost:7006`). In development the OpenAPI document is served at `/openapi/v1.json`, with Swagger UI at `/swagger`.
+
+### Tests
+
+```bash
+dotnet test ejmabunda-web-api.slnx
+```
+
+| Project | What it covers | Needs |
+| --- | --- | --- |
+| `tests/ejmabunda-web-api.UnitTests` | Controllers and services in isolation, with dependencies mocked via Moq | Nothing extra |
+| `tests/ejmabunda-web-api.IntegrationTests` | Repositories against a real SQL Server 2022 container (Testcontainers). Migrations are applied once per run, and Respawn wipes the data before each test | Docker running |
+
+Coverage so far is the Profile feature (`ProfileController`, `ProfileService`, `ProfileRepository`).
 
 ## Configuration
 
@@ -108,11 +122,17 @@ Single admin user, password only. See [ADR-001](docs/decisions/ADR-001.md) and [
 
 | Method | Route | Auth | Description |
 | --- | --- | --- | --- |
-| `POST` | `/api/Auth/login` | Anonymous | Verifies the password against the singleton admin `User`; returns a JWT access token and sets an `httpOnly` refresh-token cookie (`X-Refresh-Token`) |
-| `POST` | `/api/Auth/refresh` | Refresh cookie | Exchanges the refresh cookie for a new access token, rotating the cookie. Replaying a rotated token revokes the session |
-| `POST` | `/api/Auth/logout` | Refresh cookie | Revokes the session and clears the cookie |
+| `POST` | `/api/Auth/login` | Anonymous | Body `{ "password": "…" }`. Verifies the password against the singleton admin `User`; returns a JWT access token and sets an `httpOnly` refresh-token cookie (`X-Refresh-Token`). `401` on a wrong password |
+| `POST` | `/api/Auth/refresh` | Refresh cookie | Exchanges the refresh cookie for a new access token, rotating the cookie. `401` if the cookie is missing, `404` if the token is unknown, expired, revoked or replayed. Replaying a rotated token revokes the session |
+| `POST` | `/api/Auth/logout` | Refresh cookie | Revokes the session (if any) and clears the cookie; always `200` |
 
-Access tokens last `AccessTokenLifetimeInMinutes` (10). Refresh tokens last 7 days (sliding), are stored hashed, and are rotated on every use.
+Login and refresh both respond with:
+
+```json
+{ "token": { "accessToken": "<jwt>", "expiresIn": 600 } }
+```
+
+Access tokens last `AccessTokenLifetimeInMinutes` (10; `expiresIn` is in seconds) and are sent as `Authorization: Bearer <jwt>`. Refresh tokens last 7 days (sliding), are stored hashed, and are rotated on every use. The cookie is `Secure` and `SameSite=None` so the cross-origin frontend can send it.
 
 ### Profile (`/api/Profile`)
 
@@ -131,11 +151,11 @@ The profile is a **singleton** — always zero or one row, so these actions oper
 | --- | --- | --- | --- |
 | `GET` | `/api/Skill` | Anonymous | Lists all skills (`200 []` when empty, not `404`) |
 | `GET` | `/api/Skill/{id}` | Anonymous | Returns one skill, or `404` |
-| `POST` | `/api/Skill` | Required | Creates a skill; `201` with `Location` header |
-| `PUT` | `/api/Skill` | Required | Updates a skill (id in the body); omitted fields are left unchanged |
-| `DELETE` | `/api/Skill/{id}` | Required | Deletes a skill; `204` on success |
+| `POST` | `/api/Skill` | Required | Creates a skill; `201` with `Location` header, `400` if the category is out of range |
+| `PUT` | `/api/Skill` | Required | Updates a skill (id in the body); omitted fields are left unchanged. `404` if the id is unknown **or** the category is out of range |
+| `DELETE` | `/api/Skill/{id}` | Required | Deletes a skill; `204` on success, `404` if unknown |
 
-`SkillCategory` is an enum: request bodies bind it as the backing **integer** (`0`–`4`), responses serialize it as the **name** (`"Platform"`).
+`SkillCategory` is an enum: request bodies bind it as the backing **integer** (`0` `LanguagesAndBackend`, `1` `SystemsAndData`, `2` `Platform`, `3` `TestingAndReliability`, `4` `CloudAndDevOps`), responses serialize it as the **name** (`"Platform"`).
 
 ### Experience (`/api/Experience`)
 
@@ -146,10 +166,15 @@ Work-history entries, each with a set of linked `Skill` ids.
 | `GET` | `/api/Experience` | Anonymous | Lists all experiences, newest first (`200 []` when empty) |
 | `GET` | `/api/Experience/{id}` | Anonymous | Returns one experience with its skills, or `404` |
 | `POST` | `/api/Experience` | Required | Creates an experience; `400` if any skill id is unknown |
-| `PUT` | `/api/Experience/{id}` | Required | Updates an experience; omitted scalar fields are left unchanged |
-| `DELETE` | `/api/Experience/{id}` | Required | Deletes an experience; `204` on success |
+| `PUT` | `/api/Experience/{id}` | Required | Updates an experience; omitted scalar fields are left unchanged (except `endDate`, see below) |
+| `DELETE` | `/api/Experience/{id}` | Required | Deletes an experience; `204` on success, `404` if unknown |
 
-On `PUT`, `skillIds` is `null` to leave the linked skills untouched, `[]` to clear them, or a populated list to mirror it exactly. Unknown skill ids give a `400`.
+On `PUT`:
+
+- `skillIds` is `null` to leave the linked skills untouched, `[]` to clear them, or a populated list to mirror it exactly. Unknown skill ids give a `400`.
+- `endDate` is always overwritten: omitting it (or sending `null`) clears it, marking the entry as ongoing. Re-send the existing `endDate` to keep it.
+
+Skills in responses are sorted by name.
 
 ### Qualification (`/api/Qualification`)
 
@@ -160,10 +185,10 @@ Education entries (certificates, diplomas, degrees), each with a set of linked `
 | `GET` | `/api/Qualification` | Anonymous | Lists all qualifications, newest first (`200 []` when empty) |
 | `GET` | `/api/Qualification/{id}` | Anonymous | Returns one qualification with its skills, or `404` |
 | `POST` | `/api/Qualification` | Required | Creates a qualification; `400` if any skill id is unknown |
-| `PUT` | `/api/Qualification/{id}` | Required | Updates a qualification; omitted scalar fields are left unchanged |
-| `DELETE` | `/api/Qualification/{id}` | Required | Deletes a qualification; `204` on success |
+| `PUT` | `/api/Qualification/{id}` | Required | Updates a qualification; omitted scalar fields are left unchanged (except `endDate`) |
+| `DELETE` | `/api/Qualification/{id}` | Required | Deletes a qualification; `204` on success, `404` if unknown |
 
-`skillIds` on `PUT` works the same way as for Experience. `nqfLevel` is the South African NQF level: request bodies bind it as the **integer** (`1`–`10`), responses serialize it as the **name** (`"Diploma"`).
+`skillIds` and `endDate` on `PUT` work the same way as for Experience. `nqfLevel` is the South African NQF level: request bodies bind it as the **integer** (`1`–`10`), responses serialize it as the **name** (`"Diploma"`).
 
 Full request/response shapes are documented via XML doc comments on the controllers and DTOs, and surfaced in Swagger UI.
 
@@ -171,36 +196,42 @@ Full request/response shapes are documented via XML doc comments on the controll
 
 Source of truth: [`docs/erd/portfolio-erd.dbml`](docs/erd/portfolio-erd.dbml) (edit here, then paste into [dbdiagram.io](https://dbdiagram.io) to regenerate the SVG below).
 
-`Profile`, `Skill`, `Experience`, and `Qualification` have full CRUD controllers. `User` and `Session` back `/api/Auth` (no dedicated controller). `Project` and `Certification` (and their skill join tables) exist in the schema ahead of their own endpoints.
+`Profile`, `Skill`, `Experience`, and `Qualification` have full CRUD controllers. `User`, `Session`, and `RefreshToken` back `/api/Auth` (no dedicated controller). `Project` and `Certification` (and their skill join tables) exist in the schema ahead of their own endpoints.
+
+Migrations seed the admin `User`, the profile, the skills, the experiences, the qualifications, and one project (see `PortfolioContext.OnModelCreating`).
 
 ![Portfolio API entity relationship diagram](docs/erd/portfolio-erd.svg)
 
 ## Project structure
 
 ```text
-Controllers/   API endpoints
-Dtos/          Request/response shapes for controllers
-Services/      Business logic, one interface + implementation per feature
-Repositories/  EF Core data access, one interface + implementation per feature
-Models/        Domain entities and shared models (e.g. ApiSettings, Token, Session)
-Data/          The PortfolioContext DbContext (EF Core)
-Exceptions/    Custom exceptions (e.g. InvalidSkillIdsException)
-Filters/       MVC filters (e.g. exception-to-400 translation)
-Migrations/    EF Core migrations
-infrastructure/  Azure resource templates (ARM) — the keep-alive Logic App
-docs/decisions/  Architecture decision records
-docs/erd/        Entity relationship diagram (dbml source + generated svg)
+src/ejmabunda-web-api/            The API project
+  Controllers/                    API endpoints
+  Dtos/                           Request/response shapes for controllers
+  Services/                       Business logic, one interface + implementation per feature
+  Repositories/                   EF Core data access, one interface + implementation per feature
+  Models/                         Domain entities and shared models (e.g. ApiSettings, Token, Session)
+  Models/Migrations/              EF Core migrations
+  Data/                           The PortfolioContext DbContext (EF Core)
+  Exceptions/                     Custom exceptions (e.g. InvalidSkillIdsException)
+  Filters/                        MVC filters (e.g. exception-to-400 translation)
+tests/ejmabunda-web-api.UnitTests/         xUnit + Moq unit tests
+tests/ejmabunda-web-api.IntegrationTests/  xUnit + Testcontainers integration tests (Fixtures/ holds the SQL Server container)
+infrastructure/                   Azure resource templates (ARM): the keep-alive Logic App
+postman/                          Postman collection and environments for the API
+docs/decisions/                   Architecture decision records
+docs/erd/                         Entity relationship diagram (dbml source + generated svg)
 ```
 
 ## Deployment
 
-Pushes to `main` trigger [`.github/workflows/deploy.yaml`](.github/workflows/deploy.yaml), which builds, publishes, and deploys to Azure App Service. Authentication uses OIDC via a federated Entra ID app registration — no stored Azure credentials.
+Pushes to `main` trigger [`.github/workflows/deploy.yaml`](.github/workflows/deploy.yaml), which restores, builds, and tests the whole solution, then publishes only the API project and deploys it to Azure App Service. A failing test (unit or integration; the GitHub runner provides Docker) stops the deploy. Authentication uses OIDC via a federated Entra ID app registration, so no Azure credentials are stored.
 
 The keep-alive **Logic App** is a separate Azure resource, not part of this pipeline. It's managed in the portal; [`infrastructure/logicapp_keepalive.json`](infrastructure/logicapp_keepalive.json) is a hand-exported ARM snapshot kept for reference, so portal edits won't flow back to the repo automatically. If the App Service hostname changes, update the ping URL in the Logic App.
 
 Schema changes require a migration to be applied to the Azure database before/around deploy:
 
 ```bash
-dotnet ef migrations add <Name>
-dotnet ef database update --connection "<azure connection string>"
+dotnet ef migrations add <Name> --project src/ejmabunda-web-api --output-dir Models/Migrations
+dotnet ef database update --project src/ejmabunda-web-api --connection "<azure connection string>"
 ```

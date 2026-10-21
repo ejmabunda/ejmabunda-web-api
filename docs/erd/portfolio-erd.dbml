@@ -7,9 +7,8 @@ Table Profile {
 
 Table User {
   id int [pk, note: 'singleton row, id fixed at 1']
-  username string [unique]
-  passwordHash string
-  sessions list
+  username string
+  passwordHash string [note: 'ASP.NET Core Identity PasswordHasher output']
 }
 
 Table Skill {
@@ -23,7 +22,7 @@ Table Experience {
   jobTitle string
   employer string
   startDate date
-  endDate date
+  endDate date [null, note: 'null while the role is ongoing']
   description string
 }
 
@@ -32,7 +31,7 @@ Table Qualification {
   name string
   institution string
   startDate date
-  endDate date
+  endDate date [null, note: 'null while in progress']
   nqfLevel NqfLevel
 }
 
@@ -51,9 +50,12 @@ Table Certification {
 }
 
 Table ExperienceSkill {
-  id guid [pk]
   experienceId guid [ref: > Experience.id]
   skillId guid [ref: > Skill.id]
+
+  indexes {
+    (experienceId, skillId) [pk]
+  }
 }
 
 Table QualificationSkill {
@@ -102,7 +104,6 @@ Table Session {
   id guid [pk]
   userId int [ref: > User.id]
   refreshTokenHash string [note: 'current token, HMAC-SHA256 hashed']
-  createdAt datetime
   expiresAt datetime
   revokedAt datetime [note: 'null while active']
   rotatedAt datetime [note: 'last refresh']

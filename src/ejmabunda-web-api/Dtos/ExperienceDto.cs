@@ -29,14 +29,20 @@ public class ExperienceAddDto
     public required List<Guid> SkillIds { get; set; }
 }
 
-/// <summary>Request body for updating an <see cref="Experience"/>. Null scalar fields are left unchanged.</summary>
+/// <summary>
+/// Request body for updating an <see cref="Experience"/>. Null scalar fields are left
+/// unchanged, except <see cref="EndDate"/>.
+/// </summary>
 public class ExperienceUpdateDto
 {
     public string? JobTitle { get; set; }
     public string? Employer { get; set; }
     public DateTime? StartDate { get; set; }
 
-    /// <summary>Null while the role is ongoing.</summary>
+    /// <summary>
+    /// Always applied: null (or omitted) clears the end date, marking the role as ongoing.
+    /// Send the existing value to keep it.
+    /// </summary>
     public DateTime? EndDate { get; set; }
     public string? Description { get; set; }
 

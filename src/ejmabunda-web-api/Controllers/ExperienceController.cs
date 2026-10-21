@@ -61,8 +61,9 @@ public class ExperienceController : ControllerBase
     }
 
     /// <summary>
-    /// Updates an experience. Scalar fields omitted from the body are left unchanged;
-    /// see <see cref="ExperienceUpdateDto.SkillIds"/> for how skill links are reconciled.
+    /// Updates an experience. Scalar fields omitted from the body are left unchanged, except
+    /// <see cref="ExperienceUpdateDto.EndDate"/>, which is cleared when omitted; see
+    /// <see cref="ExperienceUpdateDto.SkillIds"/> for how skill links are reconciled.
     /// </summary>
     /// <response code="200">The updated experience.</response>
     /// <response code="400">The id is empty, or one or more skill ids do not exist.</response>

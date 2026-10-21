@@ -36,8 +36,9 @@ var secretKey = new RsaSecurityKey(rsa.ExportParameters(true));
 builder.Services.AddKeyedSingleton("public", publicKey);
 builder.Services.AddKeyedSingleton("private", secretKey);
 
-// JWT bearer authentication, required by default on controllers (see [Authorize] in
-// ProfileController) and opted out of per-action with [AllowAnonymous] for public reads.
+// JWT bearer authentication, required by the [Authorize] CRUD controllers (Profile, Skill,
+// Experience, Qualification) and opted out of per-action with [AllowAnonymous] for public reads.
+// The RSA key pair above is generated per process, so issued tokens don't survive a restart.
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {

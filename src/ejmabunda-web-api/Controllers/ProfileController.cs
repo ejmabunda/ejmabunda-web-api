@@ -10,7 +10,7 @@ namespace ejmabunda_web_api.Controllers
     /// CRUD API for the site owner's <see cref="Profile"/>. The profile is a singleton
     /// (see <see cref="Profile.Id"/>) — there is always zero or one row, so these actions
     /// operate on "the" profile rather than one identified by an id in the route.
-    /// Reads are public; writes require a JWT bearer token except profile creation.
+    /// Reads are public; writes (create, update, delete) require a JWT bearer token.
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
