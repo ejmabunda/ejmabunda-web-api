@@ -12,8 +12,8 @@ using ejmabunda_web_api.Models;
 namespace ejmabunda_web_api.Migrations
 {
     [DbContext(typeof(PortfolioContext))]
-    [Migration("20261014174310_UpdateSeed2")]
-    partial class UpdateSeed2
+    [Migration("20261017072241_PortfolioContextUpdates")]
+    partial class PortfolioContextUpdates
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
