@@ -12,6 +12,11 @@ public class Session
 
     /// <summary>HMAC-SHA256 hash of the session's current refresh token.</summary>
     public required string RefreshTokenHash { get; set; }
+
+    /// <summary>
+    /// Computed on every read (not mapped to a column), so it returns the current time rather
+    /// than when the session was created.
+    /// </summary>
     public DateTime CreatedAt => DateTime.UtcNow;
     public DateTime ExpiresAt { get; set; }
     public bool IsExpired => DateTime.UtcNow >= ExpiresAt;

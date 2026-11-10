@@ -31,7 +31,7 @@ jobs:
       - name: Test
         run: dotnet test ejmabunda-web-api.slnx --configuration Release --no-build --verbosity normal
 
-      # Publish the API project only; publishing the solution would also publish the test project.
+      # Publish the API project only; publishing the solution would also publish the test projects.
       - name: Publish
         run: dotnet publish src/ejmabunda-web-api/ejmabunda-web-api.csproj -c Release -o ./publish --no-build
 
