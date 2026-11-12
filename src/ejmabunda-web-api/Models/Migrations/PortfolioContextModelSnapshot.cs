@@ -45,7 +45,7 @@ namespace ejmabunda_web_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Certifications");
+                    b.ToTable("Certifications", (string)null);
                 });
 
             modelBuilder.Entity("ejmabunda_web_api.Models.CertificationSkill", b =>
@@ -66,7 +66,7 @@ namespace ejmabunda_web_api.Migrations
 
                     b.HasIndex("SkillId");
 
-                    b.ToTable("CertificationSkills");
+                    b.ToTable("CertificationSkills", (string)null);
                 });
 
             modelBuilder.Entity("ejmabunda_web_api.Models.Experience", b =>
@@ -95,7 +95,7 @@ namespace ejmabunda_web_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Experiences");
+                    b.ToTable("Experiences", (string)null);
 
                     b.HasData(
                         new
@@ -129,7 +129,7 @@ namespace ejmabunda_web_api.Migrations
 
                     b.HasIndex("SkillId");
 
-                    b.ToTable("ExperienceSkills");
+                    b.ToTable("ExperienceSkills", (string)null);
 
                     b.HasData(
                         new
@@ -248,7 +248,7 @@ namespace ejmabunda_web_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Profiles");
+                    b.ToTable("Profiles", (string)null);
 
                     b.HasData(
                         new
@@ -276,7 +276,7 @@ namespace ejmabunda_web_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Projects");
+                    b.ToTable("Projects", (string)null);
 
                     b.HasData(
                         new
@@ -305,7 +305,7 @@ namespace ejmabunda_web_api.Migrations
 
                     b.HasIndex("SkillId");
 
-                    b.ToTable("ProjectSkills");
+                    b.ToTable("ProjectSkills", (string)null);
 
                     b.HasData(
                         new
@@ -401,7 +401,7 @@ namespace ejmabunda_web_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Qualifications");
+                    b.ToTable("Qualifications", (string)null);
 
                     b.HasData(
                         new
@@ -445,7 +445,7 @@ namespace ejmabunda_web_api.Migrations
 
                     b.HasIndex("SkillId");
 
-                    b.ToTable("QualificationSkills");
+                    b.ToTable("QualificationSkills", (string)null);
 
                     b.HasData(
                         new
@@ -510,7 +510,7 @@ namespace ejmabunda_web_api.Migrations
 
                     b.HasIndex("SessionId");
 
-                    b.ToTable("RefreshTokens");
+                    b.ToTable("RefreshTokens", (string)null);
                 });
 
             modelBuilder.Entity("ejmabunda_web_api.Models.Session", b =>
@@ -539,7 +539,7 @@ namespace ejmabunda_web_api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Sessions");
+                    b.ToTable("Sessions", (string)null);
                 });
 
             modelBuilder.Entity("ejmabunda_web_api.Models.Skill", b =>
@@ -557,7 +557,7 @@ namespace ejmabunda_web_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Skills");
+                    b.ToTable("Skills", (string)null);
 
                     b.HasData(
                         new
@@ -775,7 +775,7 @@ namespace ejmabunda_web_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
 
                     b.HasData(
                         new
