@@ -45,7 +45,7 @@ namespace ejmabunda_web_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Certifications", (string)null);
+                    b.ToTable("Certifications");
                 });
 
             modelBuilder.Entity("ejmabunda_web_api.Models.CertificationSkill", b =>
@@ -66,7 +66,7 @@ namespace ejmabunda_web_api.Migrations
 
                     b.HasIndex("SkillId");
 
-                    b.ToTable("CertificationSkills", (string)null);
+                    b.ToTable("CertificationSkills");
                 });
 
             modelBuilder.Entity("ejmabunda_web_api.Models.Experience", b =>
@@ -95,7 +95,7 @@ namespace ejmabunda_web_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Experiences", (string)null);
+                    b.ToTable("Experiences");
 
                     b.HasData(
                         new
@@ -110,7 +110,7 @@ namespace ejmabunda_web_api.Migrations
                         new
                         {
                             Id = new Guid("00116dbb-6810-421c-a703-aecfe9872f77"),
-                            Description = "Responsible for backend development and production support on a live enterprise recruitment platform built on a Dynamics 365-inspired CRM; resolve defects across C# plugins, JavaScript form logic, and SQL Server, including a document-classification defect that was silently blocking candidates from submitting applications.\r\nBuilt an interview-scheduling module (C#/.NET, Ical.Net) that sends scoring links and calendar invites for each recruitment cycle, replacing manual scheduling coordination.\r\nBuilt a .NET console application that imports National Treasury mSCOA data through the platform's execute-request API for a municipal finance system in development; the team uses it as the only method for loading this data.\r\nConfigure Dynamics 365 model-driven apps, forms, views, business process flows, and dashboards for a client.\r\nBuilt API integrations connecting a candidate-facing portal to CRM data, and wrote SQL Server queries for reporting.",
+                            Description = "Responsible for backend development and production support on a live enterprise recruitment platform built on a Dynamics 365-inspired CRM; resolve defects across C# plugins, JavaScript form logic, and SQL Server, including a document-classification defect that was silently blocking candidates from submitting applications.\nBuilt an interview-scheduling module (C#/.NET, Ical.Net) that sends scoring links and calendar invites for each recruitment cycle, replacing manual scheduling coordination.\nBuilt a .NET console application that imports National Treasury mSCOA data through the platform's execute-request API for a municipal finance system in development; the team uses it as the only method for loading this data.\nConfigure Dynamics 365 model-driven apps, forms, views, business process flows, and dashboards for a client.\nBuilt API integrations connecting a candidate-facing portal to CRM data, and wrote SQL Server queries for reporting.",
                             Employer = "Xiquel Group",
                             JobTitle = "Junior Developer",
                             StartDate = new DateTime(2026, 2, 2, 0, 0, 0, 0, DateTimeKind.Unspecified)
@@ -129,7 +129,7 @@ namespace ejmabunda_web_api.Migrations
 
                     b.HasIndex("SkillId");
 
-                    b.ToTable("ExperienceSkills", (string)null);
+                    b.ToTable("ExperienceSkills");
 
                     b.HasData(
                         new
@@ -248,7 +248,7 @@ namespace ejmabunda_web_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Profiles", (string)null);
+                    b.ToTable("Profiles");
 
                     b.HasData(
                         new
@@ -276,7 +276,7 @@ namespace ejmabunda_web_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Projects", (string)null);
+                    b.ToTable("Projects");
 
                     b.HasData(
                         new
@@ -305,7 +305,7 @@ namespace ejmabunda_web_api.Migrations
 
                     b.HasIndex("SkillId");
 
-                    b.ToTable("ProjectSkills", (string)null);
+                    b.ToTable("ProjectSkills");
 
                     b.HasData(
                         new
@@ -401,7 +401,7 @@ namespace ejmabunda_web_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Qualifications", (string)null);
+                    b.ToTable("Qualifications");
 
                     b.HasData(
                         new
@@ -445,7 +445,7 @@ namespace ejmabunda_web_api.Migrations
 
                     b.HasIndex("SkillId");
 
-                    b.ToTable("QualificationSkills", (string)null);
+                    b.ToTable("QualificationSkills");
 
                     b.HasData(
                         new
@@ -510,7 +510,7 @@ namespace ejmabunda_web_api.Migrations
 
                     b.HasIndex("SessionId");
 
-                    b.ToTable("RefreshTokens", (string)null);
+                    b.ToTable("RefreshTokens");
                 });
 
             modelBuilder.Entity("ejmabunda_web_api.Models.Session", b =>
@@ -539,7 +539,7 @@ namespace ejmabunda_web_api.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Sessions", (string)null);
+                    b.ToTable("Sessions");
                 });
 
             modelBuilder.Entity("ejmabunda_web_api.Models.Skill", b =>
@@ -557,7 +557,7 @@ namespace ejmabunda_web_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Skills", (string)null);
+                    b.ToTable("Skills");
 
                     b.HasData(
                         new
@@ -775,7 +775,7 @@ namespace ejmabunda_web_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("Users");
 
                     b.HasData(
                         new
