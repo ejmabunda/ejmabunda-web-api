@@ -73,7 +73,7 @@ public class PortfolioContext : DbContext
                 Description = "Mentored a cohort of software engineering students through technical onboarding, code-pairing sessions, and systematic commit reviews."
             }, new Experience
             {
-                Id = new Guid("00116dbb-6810-421c-a703-aecfe9872f77"),
+                Id = new Guid("84fa5ef1-6683-4b3b-bbab-3e024755390e"),
                 JobTitle = "Junior Developer",
                 Employer = "Xiquel Group",
                 StartDate = new DateTime(2026, 02, 02),
