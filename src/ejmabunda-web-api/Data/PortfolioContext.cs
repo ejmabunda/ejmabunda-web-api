@@ -74,11 +74,11 @@ public class PortfolioContext : DbContext
             }, new Experience
             {
                 Id = new Guid("84fa5ef1-6683-4b3b-bbab-3e024755390e"),
-                JobTitle = "Junior Developer",
-                Employer = "Xiquel Group",
-                StartDate = new DateTime(2026, 02, 02),
-                EndDate = new DateTime(2026, 11, 02),
-                Description = "Responsible for backend development and production support on a live enterprise recruitment platform built on a Dynamics 365-inspired CRM; resolve defects across C# plugins, JavaScript form logic, and SQL Server, including a document-classification defect that was silently blocking candidates from submitting applications.\nBuilt an interview-scheduling module (C#/.NET, Ical.Net) that sends scoring links and calendar invites for each recruitment cycle, replacing manual scheduling coordination.\nBuilt a .NET console application that imports National Treasury mSCOA data through the platform's execute-request API for a municipal finance system in development; the team uses it as the only method for loading this data.\nConfigure Dynamics 365 model-driven apps, forms, views, business process flows, and dashboards for a client.\nBuilt API integrations connecting a candidate-facing portal to CRM data, and wrote SQL Server queries for reporting."
+                JobTitle = "Freelance Web Developer",
+                Employer = "Amos Katlego Holdings",
+                StartDate = new DateTime(2023, 08, 01),
+                EndDate = new DateTime(2023, 10, 15),
+                Description = "Built the company website with React 18, TypeScript, Vite and Bootstrap 5: six responsive routed pages (React Router) centred on a product catalog of 11 ranges rendered from data, so ranges change without editing markup.\nAdded a services and projects showcase, a supplier-brands section, and a contact form with client-side validation.\nSet up a GitHub Actions CI/CD pipeline that builds on every push to main and deploys to the client's host over FTP, with credentials held in repository secrets."
             }, new Experience
             {
                 Id = new Guid("00116dbb-6810-421c-a703-aecfe9872f77"),
@@ -133,7 +133,13 @@ public class PortfolioContext : DbContext
             new Skill { Id = new Guid("EA5743A7-0DF7-4956-8A01-08DF07C4F846"), Name = "Git", SkillCategory = SkillCategory.CloudAndDevOps },
             new Skill { Id = new Guid("9353A742-5EBC-44BB-8A02-08DF07C4F846"), Name = "GitHub Actions (OIDC)", SkillCategory = SkillCategory.CloudAndDevOps },
             new Skill { Id = new Guid("9670c65e-a27e-459a-854d-19a3a950fb28"), Name = "Azure App Service", SkillCategory = SkillCategory.CloudAndDevOps },
-            new Skill { Id = new Guid("355fe170-bea5-4614-8bc7-612a4711b345"), Name = "Azure SQL Database", SkillCategory = SkillCategory.CloudAndDevOps }
+            new Skill { Id = new Guid("355fe170-bea5-4614-8bc7-612a4711b345"), Name = "Azure SQL Database", SkillCategory = SkillCategory.CloudAndDevOps },
+
+            new Skill { Id = new Guid("c3f1a7d2-5b84-4e19-9a36-2d7e8f4b1c05"), Name = "React", SkillCategory = SkillCategory.LanguagesAndBackend },
+            new Skill { Id = new Guid("e92b6a40-1d7c-4f53-8b08-a5c4d3e71f92"), Name = "TypeScript", SkillCategory = SkillCategory.LanguagesAndBackend },
+            new Skill { Id = new Guid("4a8d0c97-6e2b-43f1-b5d9-70c1e8a2f364"), Name = "Vite", SkillCategory = SkillCategory.LanguagesAndBackend },
+            new Skill { Id = new Guid("b7e5d318-92af-4c60-8e1d-3f6a09c4b827"), Name = "Bootstrap 5", SkillCategory = SkillCategory.LanguagesAndBackend },
+            new Skill { Id = new Guid("58c2f6e1-a043-4d97-9b7e-1e8d5a30c6f9"), Name = "React Router", SkillCategory = SkillCategory.LanguagesAndBackend }
         );
 
         // seed experience skills
@@ -150,6 +156,53 @@ public class PortfolioContext : DbContext
             new ExperienceSkill
             {
                 ExperienceId = new Guid("7bba2264-b1df-48af-bfed-f1ca1c27fe95"),
+                SkillId = new Guid("EA5743A7-0DF7-4956-8A01-08DF07C4F846")   // Git
+            },
+
+            // freelance web developer, Amos Katlego Holdings
+            new ExperienceSkill
+            {
+                ExperienceId = new Guid("84fa5ef1-6683-4b3b-bbab-3e024755390e"),
+                SkillId = new Guid("c3f1a7d2-5b84-4e19-9a36-2d7e8f4b1c05")   // React
+            },
+            new ExperienceSkill
+            {
+                ExperienceId = new Guid("84fa5ef1-6683-4b3b-bbab-3e024755390e"),
+                SkillId = new Guid("e92b6a40-1d7c-4f53-8b08-a5c4d3e71f92")   // TypeScript
+            },
+            new ExperienceSkill
+            {
+                ExperienceId = new Guid("84fa5ef1-6683-4b3b-bbab-3e024755390e"),
+                SkillId = new Guid("4a8d0c97-6e2b-43f1-b5d9-70c1e8a2f364")   // Vite
+            },
+            new ExperienceSkill
+            {
+                ExperienceId = new Guid("84fa5ef1-6683-4b3b-bbab-3e024755390e"),
+                SkillId = new Guid("b7e5d318-92af-4c60-8e1d-3f6a09c4b827")   // Bootstrap 5
+            },
+            new ExperienceSkill
+            {
+                ExperienceId = new Guid("84fa5ef1-6683-4b3b-bbab-3e024755390e"),
+                SkillId = new Guid("58c2f6e1-a043-4d97-9b7e-1e8d5a30c6f9")   // React Router
+            },
+            new ExperienceSkill
+            {
+                ExperienceId = new Guid("84fa5ef1-6683-4b3b-bbab-3e024755390e"),
+                SkillId = new Guid("B3B43267-E5DD-4056-89EF-08DF07C4F846")   // JavaScript (ES6+)
+            },
+            new ExperienceSkill
+            {
+                ExperienceId = new Guid("84fa5ef1-6683-4b3b-bbab-3e024755390e"),
+                SkillId = new Guid("6298e695-2d82-49d8-bb55-654025b48d40")   // HTML/CSS
+            },
+            new ExperienceSkill
+            {
+                ExperienceId = new Guid("84fa5ef1-6683-4b3b-bbab-3e024755390e"),
+                SkillId = new Guid("2571F576-4632-40EF-89FF-08DF07C4F846")   // CI/CD pipelines
+            },
+            new ExperienceSkill
+            {
+                ExperienceId = new Guid("84fa5ef1-6683-4b3b-bbab-3e024755390e"),
                 SkillId = new Guid("EA5743A7-0DF7-4956-8A01-08DF07C4F846")   // Git
             },
 
